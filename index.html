@@ -535,18 +535,19 @@ footer{
 /* MOBILE */
 @media (max-width:700px){
 
-  /* ✅ BACK BUTTON */
+  /* ✅ BACK BUTTON (headerin sisään, sama korkeus logon kanssa) */
   .back {
-    position: fixed;
-    top: 12px;
-    left: 12px;
+    position: absolute;
+    top: 18px;
+    left: 16px;
     margin-top: 0;
-    z-index: 1000;
+    z-index: 30;
   }
 
-  /* ✅ POISTA layout-hackit mobiilissa */
+  /* ✅ HEADER toimii oikein */
   .page-header,
   .page-header-drill {
+    position: relative;
     margin-top: 0;
     transform: none;
   }
@@ -558,7 +559,7 @@ footer{
     width:100%;
   }
 
-  /* ✅ CARD FULL WIDTH */
+  /* ✅ CARD */
   .card{
     width:100%;
   }
@@ -593,7 +594,7 @@ footer{
     font-size:1.6rem;
   }
 
-  /* ✅ PRESSURE CIRCLES */
+  /* ✅ PRESSURE */
   .pressure-card{
     width:130px;
     height:130px;
@@ -611,7 +612,7 @@ footer{
     font-size:.75rem;
   }
 
-  /* ✅ HARMAAT ALUEET FIX */
+  /* ✅ HARMAAT ALUEET KUNTOON */
   .top-section{
     min-height:110px;
     flex-basis:auto;
@@ -641,7 +642,7 @@ footer{
     top:72%;
   }
 
-  /* ✅ POISTA NEGATIIVISET MARGINIT */
+  /* ✅ EI NEGATIIVISIA SIIRTOJA */
   .page-header{
     margin-top:0;
     margin-bottom:6px;
