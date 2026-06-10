@@ -4,7 +4,10 @@ const urlsToCache = [
   "./",
   "index.html",
   "Bit.png",
-  "i-series adjustment guide.pdf"
+  "i-series adjustment guide.pdf",
+  "icon-192.png",
+  "icon-512.png",
+  "manifest.json"
 ];
 
 self.addEventListener("install", (e) => {
