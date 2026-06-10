@@ -1,4 +1,5 @@
-const CACHE_NAME = "drill-app-v1";
+const CACHE_NAME = "drill-app-v2";
+``
 
 const urlsToCache = [
   "./",
