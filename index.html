@@ -535,16 +535,17 @@ footer{
 /* MOBILE */
 @media (max-width:700px){
 
-  /* ✅ BACK BUTTON (headerin sisään, sama korkeus logon kanssa) */
-.back {
-  position: fixed;
-  top: 12px;
-  left: 11px;
-  margin-top: 0;
-  z-index: 100;
+  /* ✅ BACK BUTTON */
+  .back {
+    position: fixed;
+    top: 12px;
+    left: 11px;
+    margin-top: 0;
+    z-index: 100;
+    transform: translateZ(0);
   }
 
-  /* ✅ HEADER toimii oikein */
+  /* ✅ HEADER */
   .page-header,
   .page-header-drill {
     position: relative;
@@ -612,12 +613,12 @@ footer{
     font-size:.75rem;
   }
 
-  /* ✅ NOSTETAAN MITTAREITA (oikea kohta) */
-.block:first-of-type{
-  margin-bottom:0.6rem;
-}
+  /* ✅ TÄMÄ ON SE AINOA OIKEA NOSTO */
+  .app-shell > .block:nth-child(2){
+    margin-top:-20px;
+  }
 
-  /* ✅ HARMAAT ALUEET KUNTOON */
+  /* ✅ HARMAAT ALUEET */
   .top-section{
     min-height:110px;
     flex-basis:auto;
@@ -647,15 +648,18 @@ footer{
     top:72%;
   }
 
-  /* ✅ EI NEGATIIVISIA SIIRTOJA */
+  /* ✅ HEADER FIX */
   .page-header{
     margin-top:0;
     margin-bottom:6px;
+    padding-left:90px;
+    min-height:50px;
   }
 
   .page-header-drill{
     margin-top:0;
     margin-bottom:0;
+    min-height:55px;
   }
 
   .drill-stage{
@@ -665,21 +669,6 @@ footer{
   .app-shell{
     margin-top:0;
   }
-
-  .page-header{
-  padding-left:90px;
-  min-height:50px;
-}
-
-.page-header-drill{
-  min-height:55px;
-}
-
-  .page-header,
-.page-header-drill {
-  margin-top: 0 !important;
-  transform: none !important;
-}
 
 }
 
