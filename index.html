@@ -536,21 +536,22 @@ footer{
 @media (max-width:700px){
 
   /* ✅ BACK BUTTON */
-  .back {
+  .back{
     position: fixed;
     top: 12px;
     left: 11px;
     margin-top: 0;
     z-index: 100;
     transform: translateZ(0);
+    will-change: transform;
   }
 
   /* ✅ HEADER */
   .page-header,
-  .page-header-drill {
+  .page-header-drill{
     position: relative;
-    margin-top: 0;
-    transform: none;
+    margin-top: 0 !important;
+    transform: none !important;
   }
 
   /* ✅ GRID */
@@ -613,11 +614,6 @@ footer{
     font-size:.75rem;
   }
 
-  /* ✅ TÄMÄ ON SE AINOA OIKEA NOSTO */
-  .app-shell > .block:nth-child(2){
-    margin-top:-20px;
-  }
-
   /* ✅ HARMAAT ALUEET */
   .top-section{
     min-height:110px;
@@ -648,7 +644,7 @@ footer{
     top:72%;
   }
 
-  /* ✅ HEADER FIX */
+  /* ✅ HEADER SPACING */
   .page-header{
     margin-top:0;
     margin-bottom:6px;
@@ -662,16 +658,15 @@ footer{
     min-height:55px;
   }
 
+  /* ✅ NOSTETAAN DRILLIN SISÄLTÖÄ KOKONAISENA */
   .drill-stage{
-    margin-top:0;
+    margin-top:-25px;
   }
 
   .app-shell{
     margin-top:0;
   }
-
 }
-
 </style>
 </head>
 
