@@ -522,12 +522,31 @@ footer{
   .pressure-grid{
     justify-content:center;
   }
+
+  .card{
+    margin-left:auto;
+    margin-right:auto;
+  }
 }
 
 @media (max-width:700px){
 
   .grid{
     grid-template-columns:1fr;
+    justify-items:center;
+    width:100%;
+  }
+
+  .card{
+    width:100%;
+  }
+
+  .content-wrap{
+    padding:0 10px;
+  }
+
+  .mode-button{
+    width:100%;
   }
 
   .page-header-drill .page-title{
@@ -563,10 +582,6 @@ footer{
 
   .pressure-unit{
     font-size:.76rem;
-  }
-
-  .mode-button{
-    min-width:100%;
   }
 
   .top-section{
