@@ -12,7 +12,7 @@
 
 <style>
 :root{
-  --bg:#ffffff; /* koko tausta valkoinen */
+  --bg:#000000;
   --panel:#0b1220;
   --panel2:#18212f;
   --accent:#38bdf8;
@@ -79,6 +79,8 @@ body{
   font-size:2.3rem;
   letter-spacing:.5px;
   color:#000000;
+width:100%;
+text-align:center;
 }
 
 .back{
@@ -183,6 +185,7 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
+  text-align:center;   /* ✅ LISÄÄ TÄMÄ */
 }
 
 /* ✅ VAIN category-sivuilla nostetaan header ylös */
@@ -245,14 +248,47 @@ body{
 
 /* ---------- TOOL SHELL ---------- */
 .app-shell{
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.012)),
-    var(--panel);
+  
+background:
+  linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.01)),
+  linear-gradient(145deg, #161c22, #2e3943);
+
+
   border:1px solid rgba(255,255,255,.08);
   border-radius:26px;
   padding:1.8rem;
-  box-shadow:0 18px 40px rgba(0,0,0,.32);
+
+  /* 🔥 WOW EFFECT (depth + glow) */
+  box-shadow:
+    0 20px 45px rgba(0,0,0,.55),                 /* syvyys */
+    inset 0 1px 0 rgba(255,255,255,.06),         /* kevyt metallivalo */
+    inset 0 -3px 8px rgba(0,0,0,.4),             /* alareunan varjo */
+    0 0 20px rgba(255,130,0,.3);                /* 🔥 Sandvik orange glow */
+
   margin-top:-6px;
+
+  position:relative;
+  overflow:hidden;
+}
+
+.app-shell::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      120deg,
+      transparent 0%,
+      rgba(255,255,255,.08) 40%,
+      transparent 70%
+    );
+
+  pointer-events:none;
+  opacity:.35;
 }
 
 .block{
