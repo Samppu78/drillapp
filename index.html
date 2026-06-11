@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -12,7 +12,7 @@
 
 <style>
 :root{
-  --bg:#111827;
+  --bg:#ffffff; /* koko tausta valkoinen */
   --panel:#0b1220;
   --panel2:#18212f;
   --accent:#38bdf8;
@@ -27,7 +27,7 @@
   --bottom-gray:#1f2730;
 
   /* HOME / CATEGORY BIT IMAGE CONTROL */
-  --bit-width:500px;
+  --bit-width:600px;
   --bit-top:68%;
   --bit-left:50%;
 }
@@ -75,7 +75,9 @@ body{
   margin:0 0 .7rem 0;
   font-size:2.3rem;
   letter-spacing:.5px;
-  color:#ffffff;
+  color:#000000;
+
+
 }
 
 .back{
@@ -85,15 +87,20 @@ body{
   display:inline-block;
   font-weight:800;
   font-size:1.16rem;
-  color:#f3f4f6;
-  position:relative;
+  color:#000000;
+
+  position:absolute;   /* ✅ irti layoutista */
+  left:0;              /* ✅ vasempaan reunaan */
+
   z-index:30;
-margin-top:-10px;
+  margin-top:-10px;
 }
 
 .back:hover{
   opacity:1;
 }
+
+
 
 /* ---------- SHARED LAYOUT ---------- */
 .app-layout{
@@ -106,9 +113,7 @@ margin-top:-10px;
 
 .top-section{
   min-height:20vh;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
-    var(--top-gray);
+  background:#000000;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -120,14 +125,12 @@ margin-top:-10px;
 
 .middle-section{
   min-height:35vh;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)),
-    var(--middle-gray);
+  background:#ffffff;
   display:flex;
- align-items:flex-start;
+  align-items:center;
   justify-content:center;
-  padding:34px 20px 26px;
-  flex:0 0 auto;
+  padding:20px;
+  flex:0 0 35vh;
   position:relative;
   z-index:4; /* tärkeä: tämä nostaa sisällön tumman yläosan päälle */
 }
@@ -135,11 +138,9 @@ margin-top:-10px;
 .bottom-section{
   flex:1 0 45vh;
   min-height:45vh;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.01), rgba(0,0,0,.10)),
-    var(--bottom-gray);
+  background:#000000;
   position:relative;
-  z-index:1;
+  z-index:0;   /* ✅ tärkeä muutos */
 }
 
 /* ---------- CONTENT WRAPPERS ---------- */
@@ -177,19 +178,24 @@ margin-top:-10px;
   margin-top:-120px;
   margin-bottom:-2px;
   padding-top:10px;
+
+  display:flex;              /* ✅ lisää tämä */
+  justify-content:center;    /* ✅ keskittää otsikon */
+  align-items:center;        /* ✅ pitää pystysuunnan siistinä */
+
 }
 
 .page-header-drill{
   position:relative;
   z-index:20;
-  margin-top:-40px;
-  margin-bottom:-10px;
+  margin-top:0;        /* ✅ ei negatiivista */
+  margin-bottom:10px;
   padding-top:10px;
-transform: translateY(-70px);
+  transform:none;      /* ✅ tärkein muutos */
 }
 
 .drill-stage{
-  margin-top:-25px;
+  margin-top:25px;
 }
 
 /* ---------- CARDS ---------- */
@@ -203,8 +209,9 @@ transform: translateY(-70px);
   width:220px;
   min-height:140px;
 
-  background:linear-gradient(180deg, #0b1220, #0f172a);
-  border:1px solid rgba(255,255,255,.08);
+  
+  background:#000000;
+  border:1px solid #ff8200;
   border-radius:22px;
   padding:2rem;
   cursor:pointer;
@@ -212,19 +219,14 @@ transform: translateY(-70px);
   box-shadow:0 14px 34px rgba(0,0,0,.28);
   transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
   font-weight:700;
-  color:#f8fafc;
+  color:#ffffff;
 }
 
 .card:hover{
-  transform:translateY(-6px);
-  box-shadow:
-    0 20px 38px rgba(0,0,0,.34),
-    0 0 12px rgba(255,130,0,.5),
-    0 0 0 2px rgba(255,130,0,.7);
-
-  border-color:#ff8200;
-
-  background:linear-gradient(180deg, #111827, #0f172a);
+  transform:translateY(-4px);
+  background:#111111;
+  box-shadow:0 10px 25px rgba(0,0,0,.3);
+  
 }
 
 .card small{
@@ -494,15 +496,12 @@ input[type=range]::-moz-range-thumb{
   top:var(--bit-top);
   left:var(--bit-left);
   transform:translate(-50%, -50%);
-  z-index:2;
+  z-index:5;
   pointer-events:none;
   user-select:none;
-mix-blend-mode:soft-light;
 
-
-  opacity:1.20;
-
-
+  /* 🔥 ORANSSI HEHKU */
+  filter: drop-shadow(0 0 25px rgba(255,130,0,0.5));
 }
 
 footer{
@@ -510,8 +509,9 @@ footer{
   opacity:.55;
   font-size:.78rem;
   padding:1rem 0 2rem;
-  color:#cbd5e1;
-  background:var(--bottom-gray);
+  background:#000000;
+  color:#ffffff;
+
 }
 
 /* ---------- MOBILE ---------- */
@@ -535,23 +535,21 @@ footer{
 /* MOBILE */
 @media (max-width:700px){
 
-  /* ✅ BACK BUTTON */
-  .back{
-    position: fixed;
-    top: 12px;
-    left: 11px;
-    margin-top: 0;
-    z-index: 100;
-    transform: translateZ(0);
-    will-change: transform;
+  /* ✅ BACK BUTTON (headerin sisään, sama korkeus logon kanssa) */
+.back {
+  position: fixed;
+  top: 12px;
+  left: 11px;
+  margin-top: 0;
+  z-index: 100;
   }
 
-  /* ✅ HEADER */
+  /* ✅ HEADER toimii oikein */
   .page-header,
-  .page-header-drill{
+  .page-header-drill {
     position: relative;
-    margin-top: 0 !important;
-    transform: none !important;
+    margin-top: 0;
+    transform: none;
   }
 
   /* ✅ GRID */
@@ -614,7 +612,7 @@ footer{
     font-size:.75rem;
   }
 
-  /* ✅ HARMAAT ALUEET */
+  /* ✅ HARMAAT ALUEET KUNTOON */
   .top-section{
     min-height:110px;
     flex-basis:auto;
@@ -644,29 +642,42 @@ footer{
     top:72%;
   }
 
-  /* ✅ HEADER SPACING */
+  /* ✅ EI NEGATIIVISIA SIIRTOJA */
   .page-header{
     margin-top:0;
     margin-bottom:6px;
-    padding-left:90px;
-    min-height:50px;
   }
 
   .page-header-drill{
     margin-top:0;
     margin-bottom:0;
-    min-height:55px;
   }
 
-  /* ✅ NOSTETAAN DRILLIN SISÄLTÖÄ KOKONAISENA */
   .drill-stage{
-    margin-top:-35px;
+    margin-top:0;
   }
 
   .app-shell{
     margin-top:0;
   }
+
+  .page-header{
+  padding-left:90px;
+  min-height:50px;
 }
+
+.page-header-drill{
+  position:relative;
+  z-index:20;
+
+  min-height:55px;
+
+  display:flex;              /* ✅ sama kuin toisessa headerissa */
+  justify-content:center;    /* ✅ keskittää RD525 */
+  align-items:center;        /* ✅ pystysuuntainen linjaus */
+}
+}
+
 </style>
 </head>
 
