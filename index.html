@@ -576,31 +576,57 @@ footer{
 /* MOBILE */
 @media (max-width:700px){
 
-  .drill-stage{
-    margin-top:20px;
-  }
-
   /* ✅ BACK BUTTON */
   .back {
     position: fixed;
     top: 12px;
     left: 11px;
-    margin-top: 0;
     z-index: 100;
   }
 
-  /* ✅ HEADER mobiilikorjaus */
+  /* ✅ HEADER oikein alas (EI nostoja mobiilissa) */
   .page-header,
   .page-header-drill {
     position: relative;
-    margin-top: 30px;
+    margin-top: 20px;
+    margin-bottom: 10px;
     transform: none;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
   }
 
-  /* ✅ TÄMÄ LISÄYS */
+  /* ✅ otsikko oikeasti keskelle */
+  .page-title{
+    width:100%;
+    text-align:center;
+  }
+
+  /* ✅ KORKEIN PRIORITEETTI – category sivut EI saa nousta ylös */
+  .category-page .page-header{
+    margin-top:0 !important;
+  }
+
+  /* ✅ grid EI saa alkaa liian ylhäällä */
+  .category-page #categoryGrid{
+    margin-top:25px !important;
+  }
+
+  /* ✅ varmistus ettei mikään nouse headerin päälle */
   .middle-section{
     align-items:flex-start;
-    padding-top:20px;
+    padding-top:15px;
+  }
+
+  /* ✅ drill korjaus */
+  .drill-stage{
+    margin-top:15px;
+  }
+
+  /* ✅ varmistaa ettei paneeli hyppää */
+  .app-shell{
+    margin-top:0;
   }
 
 }
