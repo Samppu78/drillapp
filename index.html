@@ -178,37 +178,53 @@ text-align:center;
 .page-header{
   position:relative;
   z-index:20;
+
   margin-top:-20px;
   margin-bottom:10px;
   padding-top:0;
 
-  width:100%;              /* ✅ LISÄÄ TÄMÄ */
+  width:100%;
 
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
+  display:block;        /* 🔥 tärkein muutos */
+  text-align:center;    /* 🔥 tämä keskittää oikein */
 }
-
 
 .page-header h1{
   margin:0;
+  display:block;
+  width:100%;
+  text-align:center;
 }
 
-/* ✅ Drill ei tee enää mitään erikoista */
+/* ✅ category EI siirrä enää vinoon */
+.category-page .page-header{
+  margin-top:0;
+}
+
+/* ✅ Drill header sama logiikka */
 .page-header-drill{
   position:relative;
   z-index:20;
   margin-top:0;
   margin-bottom:10px;
   padding-top:10px;
+
+  width:100%;
+  display:block;
+  text-align:center;
+}
+
+.page-header-drill h1{
+  margin:0;
+  width:100%;
+  text-align:center;
 }
 
 /* ✅ Mittariston sijainti */
 .drill-stage{
   margin-top:120px;
 }
-
+    
 /* ---------- CARDS ---------- */
 
 .card{
