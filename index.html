@@ -576,33 +576,8 @@ footer{
 /* MOBILE */
 @media (max-width:700px){
 
-  /* ✅ HEADER oikein valkoiseen alueeseen */
-  .page-header,
-  .page-header-drill {
-    position: relative;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    transform: none;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-  }
-
-  /* ✅ otsikko aina keskelle */
-  .page-title{
-    width:100%;
-    text-align:center;
-  }
-
-  /* ✅ DRILL CONTENT EI SAA NOUSTA MUSTALLE */
   .drill-stage{
-    margin-top:10px;
-  }
-
-  /* ✅ POWER PANEL EI HYPPÄÄ YLÖS */
-  .app-shell{
-    margin-top:0;
+    margin-top:20px;
   }
 
   /* ✅ BACK BUTTON */
@@ -610,7 +585,22 @@ footer{
     position: fixed;
     top: 12px;
     left: 11px;
+    margin-top: 0;
     z-index: 100;
+  }
+
+  /* ✅ HEADER mobiilikorjaus */
+  .page-header,
+  .page-header-drill {
+    position: relative;
+    margin-top: 30px;
+    transform: none;
+  }
+
+  /* ✅ TÄMÄ LISÄYS */
+  .middle-section{
+    align-items:flex-start;
+    padding-top:20px;
   }
 
 }
