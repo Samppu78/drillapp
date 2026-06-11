@@ -183,13 +183,16 @@ text-align:center;
   margin-bottom:20px;
 
   width:100%;
-  max-width:1100px;      /* ✅ sama kuin content-wrap */
-  
-  margin-left:auto;
-  margin-right:auto;
 
+  display:flex;
+}
+
+/* 🔥 tämä on ratkaiseva */
+.page-header h1{
+  margin:0 auto;     /* ✅ keskittää H1:n oikeaan kohtaan */
   text-align:center;
 }
+
 
 
 .page-header h1{
