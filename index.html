@@ -180,14 +180,17 @@ text-align:center;
   z-index:20;
 
   margin-top:-20px;
-  margin-bottom:10px;
-  padding-top:0;
+  margin-bottom:20px;
 
   width:100%;
+  max-width:1100px;      /* ✅ sama kuin content-wrap */
+  
+  margin-left:auto;
+  margin-right:auto;
 
-  display:block;        /* 🔥 tärkein muutos */
-  text-align:center;    /* 🔥 tämä keskittää oikein */
+  text-align:center;
 }
+
 
 .page-header h1{
   margin:0;
