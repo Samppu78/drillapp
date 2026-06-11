@@ -36,6 +36,9 @@
 
 html, body{
   height:100%;
+  margin:0;
+  padding:0;
+
 }
 
 body{
@@ -76,30 +79,28 @@ body{
   font-size:2.3rem;
   letter-spacing:.5px;
   color:#000000;
-
-
 }
 
 .back{
   cursor:pointer;
   opacity:.95;
-  margin-bottom:.35rem;
-  display:inline-block;
   font-weight:800;
   font-size:1.16rem;
-  color:#000000;
+  color:#ffffff;
 
-  position:absolute;   /* ✅ irti layoutista */
-  left:0;              /* ✅ vasempaan reunaan */
+  position:fixed;
+  left:15px;
+  top:20px;
 
-  z-index:30;
-  margin-top:-10px;
+  z-index:99999;
+
+  pointer-events:auto;
 }
 
 .back:hover{
   opacity:1;
+  transform:scale(1.05);
 }
-
 
 
 /* ---------- SHARED LAYOUT ---------- */
@@ -112,17 +113,16 @@ body{
 }
 
 .top-section{
-  min-height:20vh;
+  height:20vh;           /* 🔥 tärkein muutos */
   background:#000000;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:28px 20px;
-  flex:0 0 20vh;
+  flex:0 0 auto;         /* 🔥 poistetaan lukittu flex */
   position:relative;
   z-index:3;
 }
-
 .middle-section{
   min-height:35vh;
   background:#ffffff;
@@ -172,32 +172,37 @@ body{
 }
 
 /* ---------- PAGE HEADERS ---------- */
+
 .page-header{
   position:relative;
   z-index:20;
-  margin-top:-120px;
+  margin-top:0;
   margin-bottom:-2px;
   padding-top:10px;
 
-  display:flex;              /* ✅ lisää tämä */
-  justify-content:center;    /* ✅ keskittää otsikon */
-  align-items:center;        /* ✅ pitää pystysuunnan siistinä */
-
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
+/* ✅ VAIN category-sivuilla nostetaan header ylös */
+.category-page .page-header{
+  margin-top:-120px;
+}
+
+/* ✅ Drill ei tee enää mitään erikoista */
 .page-header-drill{
   position:relative;
   z-index:20;
-  margin-top:0;        /* ✅ ei negatiivista */
+  margin-top:0;
   margin-bottom:10px;
   padding-top:10px;
-  transform:none;      /* ✅ tärkein muutos */
 }
 
+/* ✅ Mittariston sijainti */
 .drill-stage{
-  margin-top:25px;
+  margin-top:120px;
 }
-
 /* ---------- CARDS ---------- */
 
 .card{
@@ -815,19 +820,22 @@ function renderLayout(contentHTML, options = {}){
         </div>
       </section>
 
-      <section class="middle-section">
-        <div class="content-wrap ${narrow ? "narrow" : ""}">
-          ${contentHTML}
-        </div>
-      </section>
+<section class="middle-section">
+  <div class="content-wrap ${narrow ? "narrow" : ""}">
+    ${contentHTML}
+  </div>
+</section>
 
-      <section class="bottom-section"></section>
+${options.backButton ? `
+<div class="back" onclick="${options.backAction}">← Back</div>
+` : ``}
 
-      ${showBit ? `<img class="home-bit-image" src="${bitSrc}" alt="Drill bit" />` : ``}
-    </section>
-  `;
+<section class="bottom-section"></section>
+
+${showBit ? `<img class="home-bit-image" src="${bitSrc}" alt="Drill bit" />` : ``}
+</section>
+`;
 }
-
 /* ---------- HOME ---------- */
 
 function showHome(){
@@ -863,19 +871,22 @@ function openCategory(key){
   currentCategory = key;
 
   const content = `
-    <div class="page-header">
-      <div class="back" onclick="showHome()">← Back</div>
+<div class="page-header">
+      
       <h1 class="page-title">${category.title}</h1>
     </div>
 
     <div class="grid" id="categoryGrid"></div>
   `;
 
+
 app.innerHTML = renderLayout(content, {
   narrow: false,
   showBit: true,
   bitSrc: "Bit.png",
-  category: true
+  category: true,
+  backButton: true,
+  backAction: "showHome()"
 });
 
   const grid = document.getElementById("categoryGrid");
@@ -902,15 +913,17 @@ app.innerHTML = renderLayout(content, {
 /* ---------- DRILL ---------- */
 function openDrill(name){
   const content = `
-    <div class="page-header-drill">
-      <div class="back" onclick="openCategory('${currentCategory}')">← Back</div>
-     <!-- poistettu otsikko -->
-    </div>
+  <div class="page-header">
+    <h1 class="page-title" style="visibility:hidden;">${name}</h1>
+  </div>
 
-    <div id="drillContainer" class="drill-stage"></div>
-  `;
+  <div id="drillContainer" class="drill-stage"></div>
+`;
 
-  app.innerHTML = renderLayout(content);
+  app.innerHTML = renderLayout(content, {
+  backButton: true,
+  backAction: "openCategory('" + currentCategory + "')"
+});
 
   const container = document.getElementById("drillContainer");
   const config = drillConfigs[name];
@@ -924,7 +937,7 @@ function openDrill(name){
       </div>
     `;
   }
-}
+} 
 
 /* ---------- COMMON ---------- */
 function interpolate(min, max, percent){
