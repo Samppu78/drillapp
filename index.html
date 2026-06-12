@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-  <style>
+<style>
 :root{
   --bg:#000000;
   --panel:#0b1220;
@@ -27,8 +27,8 @@
   --bottom-gray:#1f2730;
 
   /* HOME / CATEGORY BIT IMAGE CONTROL */
-  --bit-width:600px;
-  --bit-top:68%;
+  --bit-width:800;
+  --bit-top:80%;
   --bit-left:50%;
 }
 
@@ -90,7 +90,7 @@ text-align:center;
   font-size:1.16rem;
   color:#ffffff;
 
-  position:fixed;
+  position:absolute;
   left:15px;
   top:20px;
 
@@ -129,7 +129,7 @@ text-align:center;
   min-height:35vh;
   background:#ffffff;
   display:flex;
-  align-items:flex-start;
+ align-items:flex-start;
   justify-content:center;
   padding:20px;
   flex:0 0 35vh;
@@ -180,20 +180,14 @@ text-align:center;
   z-index:20;
 
   margin-top:-20px;
-  margin-bottom:20px;
+  margin-bottom:10px;
+  padding-top:0;
 
   width:100%;
 
-  display:flex;
+  display:block;        /* 🔥 tärkein muutos */
+  text-align:center;    /* 🔥 tämä keskittää oikein */
 }
-
-/* 🔥 tämä on ratkaiseva */
-.page-header h1{
-  margin:0 auto;     /* ✅ keskittää H1:n oikeaan kohtaan */
-  text-align:center;
-}
-
-
 
 .page-header h1{
   margin:0;
@@ -229,9 +223,8 @@ text-align:center;
 /* ✅ Mittariston sijainti */
 .drill-stage{
   margin-top:120px;
-}
-    
-/* ---------- CARDS ---------- */
+
+}/* ---------- CARDS ---------- */
 
 .card{
   display:flex;
@@ -559,25 +552,21 @@ input[type=range]::-moz-range-thumb{
 .home-bit-image{
   position:absolute;
   width:var(--bit-width);
-  top:var(--bit-top);
-  left:var(--bit-left);
-  transform:translate(-50%, -50%);
-  z-index:5;
+
+  bottom:0;               /* ✅ sidotaan suoraan alareunaan */
+  left:50%;
+
+  transform:translate(-50%, 60%);  /* ✅ nostetaan kuvaa sopivasti */
+
+  z-index:999;
+
   pointer-events:none;
   user-select:none;
 
-  /* 🔥 ORANSSI HEHKU */
-  filter: drop-shadow(0 0 25px rgba(255,130,0,0.5));
-}
-
-footer{
-  text-align:center;
-  opacity:.55;
-  font-size:.78rem;
-  padding:1rem 0 2rem;
-  background:#000000;
-  color:#ffffff;
-
+  filter:
+  drop-shadow(0 0 20px rgba(255,130,0,0.6))
+  drop-shadow(0 0 40px rgba(255,130,0,0.5))
+  drop-shadow(0 0 80px rgba(255,130,0,0.3));
 }
 
 /* ---------- MOBILE ---------- */
@@ -609,17 +598,16 @@ footer{
     z-index: 100;
   }
 
-  /* ✅ HEADER oikein alas (EI nostoja mobiilissa) */
   .page-header,
-  .page-header-drill {
-    position: relative;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    transform: none;
+.page-header-drill {
+  position: relative;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  transform: none;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+  display:block;          /* ✅ tärkein muutos */
+  text-align:center;      /* ✅ tämä hoitaa keskityksen */
+
   }
 
   /* ✅ otsikko oikeasti keskelle */
@@ -740,10 +728,16 @@ footer{
   }
 
   /* ✅ BIT IMAGE */
-  .home-bit-image{
-    width:220px;
-    top:72%;
-  }
+ .home-bit-image{
+  width:600px;   /* ✅ nyt säädät oikeasti mobiilikokoa */
+
+  bottom:0;
+  left:50%;
+
+  transform:translate(-50%, -90%);   /* ⬆ nostettu hieman */
+
+  z-index:999;
+}
 
   /* ✅ EI NEGATIIVISIA SIIRTOJA */
   .page-header{
@@ -764,9 +758,11 @@ footer{
     margin-top:0;
   }
 
-  .page-header{
-  padding-left:90px;
+ .page-header{
+  padding-left:0;
   min-height:50px;
+  width:100%;
+  text-align:center;
 }
 
 .page-header-drill{
@@ -1012,17 +1008,17 @@ app.innerHTML = renderLayout(content, {
 /* ---------- DRILL ---------- */
 function openDrill(name){
   const content = `
-  <div class="page-header">
-    <h1 class="page-title" style="visibility:hidden;">${name}</h1>
-  </div>
+    <div class="page-header-drill">
+      <h1 class="page-title">${name}</h1>
+    </div>
 
-  <div id="drillContainer" class="drill-stage"></div>
-`;
+    <div id="drillContainer" class="drill-stage"></div>
+  `;
 
   app.innerHTML = renderLayout(content, {
-  backButton: true,
-  backAction: "openCategory('" + currentCategory + "')"
-});
+    backButton: true,
+    backAction: "openCategory('" + currentCategory + "')"
+  });
 
   const container = document.getElementById("drillContainer");
   const config = drillConfigs[name];
@@ -1036,8 +1032,7 @@ function openDrill(name){
       </div>
     `;
   }
-} 
-
+}
 /* ---------- COMMON ---------- */
 function interpolate(min, max, percent){
   return Math.round(min + (max - min) * (percent / 100));
@@ -1056,7 +1051,6 @@ function calculateRPM(freq, selectedBit){
 
 /* ---------- GENERIC DRILL MODULE ---------- */
 function renderDrillTool(container, config, drillName){
-  const currentDrillName = drillName;
   let selectedBit = config.defaults.selectedBit;
   let powerValue = config.defaults.powerValue;
   let mode = config.defaults.mode;
@@ -1064,28 +1058,9 @@ function renderDrillTool(container, config, drillName){
   container.innerHTML = `
     <div class="app-shell">
       <div class="block">
- <div style="
-  position:relative;
-  display:flex;
-  align-items:flex-start;
-">
-
   <div class="block-title">Drilling Power</div>
 
-  <div style="
-  position:absolute;
-  left:47%;
-  transform:translate(-50%, -20px);
-  font-size:1.2rem;
-  font-weight:900;
-  color:#ffffff;
-  pointer-events:none;
-">
-    ${currentDrillName}
-  </div>
-
-</div>
-    <div class="power-wrap">
+  <div class="power-wrap">
 
   <div class="power-header">
     <div id="powerDisplay" class="power-value">${powerValue}%</div>
