@@ -735,8 +735,9 @@ input[type=range]::-moz-range-thumb{
     width:400px;                 /* ✅ mobiilikoko */
     bottom:0;
     left:50%;
-    transform:translate(-50%, -120%);
+    transform:translate(-50%, -120%) translateZ(0);
     z-index:999;
+    will-change: transform;   /* ✅ tärkein fix Safariin */
   }
 
   /* ✅ muut mobiilityylit tänne */
