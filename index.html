@@ -592,7 +592,7 @@ input[type=range]::-moz-range-thumb{
 
   /* ✅ BACK BUTTON */
   .back {
-    position: fixed;
+    position: absolute;
     top: 12px;
     left: 11px;
     z-index: 100;
@@ -728,16 +728,20 @@ input[type=range]::-moz-range-thumb{
   }
 
   /* ✅ BIT IMAGE */
- .home-bit-image{
-  width:600px;   /* ✅ nyt säädät oikeasti mobiilikokoa */
 
-  bottom:0;
-  left:50%;
 
-  transform:translate(-50%, -90%);   /* ⬆ nostettu hieman */
+/* ✅ BIT IMAGE */
+  .home-bit-image{
+    width:320px;                 /* ✅ mobiilikoko */
+    bottom:0;
+    left:50%;
+    transform:translate(-50%, -80%);
+    z-index:999;
+  }
 
-  z-index:999;
+  /* ✅ muut mobiilityylit tänne */
 }
+
 
   /* ✅ EI NEGATIIVISIA SIIRTOJA */
   .page-header{
