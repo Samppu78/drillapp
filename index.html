@@ -595,51 +595,51 @@ input[type=range]::-moz-range-thumb{
     z-index: 100;
   }
 
+  /* ✅ HEADER */
   .page-header,
-.page-header-drill {
-  position: relative;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  transform: none;
-
-  display:block;          /* ✅ tärkein muutos */
-  text-align:center;      /* ✅ tämä hoitaa keskityksen */
-
-  }
-
-  /* ✅ otsikko oikeasti keskelle */
-  .page-title{
-    width:100%;
+  .page-header-drill {
+    position: relative;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    display:block;
     text-align:center;
   }
 
-  /* ✅ KORKEIN PRIORITEETTI – category sivut EI saa nousta ylös */
+  .page-title{
+    width:100%;
+    text-align:center;
+    font-size:1.4rem;
+    line-height:1.2;
+  }
+
+  .page-header-drill .page-title{
+    font-size:1.2rem;
+    font-weight:700;
+  }
+
+  /* ✅ CATEGORY FIX */
   .category-page .page-header{
     margin-top:0 !important;
   }
 
-  /* ✅ grid EI saa alkaa liian ylhäällä */
   .category-page #categoryGrid{
     margin-top:25px !important;
   }
 
-  /* ✅ varmistus ettei mikään nouse headerin päälle */
+  /* ✅ LAYOUT */
   .middle-section{
     align-items:flex-start;
     padding-top:15px;
   }
 
-  /* ✅ drill korjaus */
   .drill-stage{
     margin-top:15px;
   }
 
-  /* ✅ varmistaa ettei paneeli hyppää */
   .app-shell{
     margin-top:0;
   }
 
-}
   /* ✅ GRID */
   .grid{
     grid-template-columns:1fr;
@@ -659,17 +659,6 @@ input[type=range]::-moz-range-thumb{
 
   .mode-button{
     width:100%;
-  }
-
-  /* ✅ TYPO */
-  .page-title{
-    font-size:1.4rem;
-    line-height:1.2;
-  }
-
-  .page-header-drill .page-title{
-    font-size:1.2rem;
-    font-weight:700;
   }
 
   /* ✅ BIT GRID */
@@ -700,10 +689,9 @@ input[type=range]::-moz-range-thumb{
     font-size:.75rem;
   }
 
-  /* ✅ HARMAAT ALUEET KUNTOON */
+  /* ✅ SECTIONS */
   .top-section{
     min-height:110px;
-    flex-basis:auto;
   }
 
   .middle-section{
@@ -724,59 +712,63 @@ input[type=range]::-moz-range-thumb{
     font-size:1.05rem;
   }
 
-  /* ✅ BIT IMAGE */
+  /* ✅ 🔥 BIT SYSTEM (UUSI OIKEA RAKENNE) */
 
-
-/* ✅ BIT IMAGE */
-  .home-bit-image{
-    width:400px;                 /* ✅ mobiilikoko */
+  .bit-wrapper{
+    position:absolute;
     bottom:0;
     left:50%;
-    transform:translate(-50%, -120%) translateZ(0);
+    transform:translate(-50%, -40%);   /* 🔧 säädä tästä */
     z-index:999;
-    will-change: transform;   /* ✅ tärkein fix Safariin */
   }
 
-  /* ✅ muut mobiilityylit tänne */
-}
+  .home-bit-image{
+    position:relative;
+    z-index:2;
+    width:320px;   /* 🔧 säädä tästä */
+  }
 
+  .bit-glow{
+    position:absolute;
 
-  /* ✅ EI NEGATIIVISIA SIIRTOJA */
+    width:360px;
+    height:360px;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%, -20%);
+
+    border-radius:50%;
+
+    background: radial-gradient(
+      circle,
+      rgba(255,130,0,0.7) 0%,
+      rgba(255,130,0,0.4) 40%,
+      rgba(255,130,0,0.15) 70%,
+      transparent 90%
+    );
+
+    z-index:1;
+  }
+
+  /* ✅ FINAL FIXES */
   .page-header{
-    margin-top:0;
-    margin-bottom:6px;
+    padding-left:0;
+    min-height:50px;
+    width:100%;
+    text-align:center;
   }
 
   .page-header-drill{
-    margin-top:0;
-    margin-bottom:0;
+    position:relative;
+    z-index:20;
+    min-height:55px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
   }
 
-  .drill-stage{
-    margin-top:0;
-  }
-
-  .app-shell{
-    margin-top:0;
-  }
-
- .page-header{
-  padding-left:0;
-  min-height:50px;
-  width:100%;
-  text-align:center;
-}
-
-.page-header-drill{
-  position:relative;
-  z-index:20;
-
-  min-height:55px;
-
-  display:flex;              /* ✅ sama kuin toisessa headerissa */
-  justify-content:center;    /* ✅ keskittää RD525 */
-  align-items:center;        /* ✅ pystysuuntainen linjaus */
-}
 }
 
 </style>
