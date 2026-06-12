@@ -1,8 +1,10 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<meta name="theme-color" content="#000000">
 <title>Sandvik Drilling Settings Tool</title>
 
 <link rel="manifest" href="manifest.json">
@@ -12,24 +14,15 @@
 
 <style>
 :root{
-  --bg:#ffffff; /* koko tausta valkoinen */
-  --panel:#0b1220;
-  --panel2:#18212f;
-  --accent:#38bdf8;
-  --accent2:#22c55e;
+  --black:#000000;
+  --white:#f3f3f3;
+  --card-black:#050505;
+  --sandvik:#ff8200;
+  --panel:#0f1722;
+  --panel2:#1a2430;
   --text:#e5e7eb;
-  --muted:#9ca3af;
-  --ring:rgba(56,189,248,.25);
-
-  /* DARKER SANDVIK-STYLE GRAYS */
-  --top-gray:#2a333d;
-  --middle-gray:#43505d;
-  --bottom-gray:#1f2730;
-
-  /* HOME / CATEGORY BIT IMAGE CONTROL */
-  --bit-width:500px;
-  --bit-top:68%;
-  --bit-left:50%;
+  --muted:#aeb7c2;
+  --ring:rgba(255,130,0,.18);
 }
 
 *{box-sizing:border-box}
@@ -45,16 +38,24 @@ body{
   background:var(--black);
   color:var(--text);
 }
+``
+#app{min-height:100vh}
 
-#app{
+.app-layout{
   min-height:100vh;
+  background:var(--black);
 }
 
-.subtitle{
-  font-size:1.3rem;
-  color:#eef2f7;
-  margin-top:0.5rem;
-  letter-spacing:.2px;
+.hero{
+  background:var(--black);
+  color:#fff;
+  padding:24px 20px 18px;
+}
+
+.hero-inner{
+  width:100%;
+  max-width:1180px;
+  margin:0 auto;
 }
 
 .brand{
@@ -62,185 +63,153 @@ body{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  margin:0;
-  text-align:center;
+  gap:10px;
 }
 
 .logo{
-  width:260px;
-  margin-bottom:1rem;
+  width:360px;
+  max-width:90%;
   filter:brightness(0) invert(1);
 }
 
-.page-title{
-  margin:0 0 .7rem 0;
-  font-size:2.3rem;
-  letter-spacing:.5px;
+.subtitle{
+  font-size:1.05rem;
   color:#ffffff;
+  letter-spacing:.2px;
+}
+
+.title-row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  margin-top:22px;
+}
+
+.title-col{
+  min-width:0;
 }
 
 .back{
-  cursor:pointer;
-  opacity:.95;
-  margin-bottom:.35rem;
-  display:inline-block;
-  font-weight:800;
-  font-size:1.16rem;
-  color:#f3f4f6;
-  position:relative;
-  z-index:30;
-margin-top:-10px;
-}
-
-.back:hover{
-  opacity:1;
-}
-
-/* ---------- SHARED LAYOUT ---------- */
-.app-layout{
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  position:relative;
-  overflow:hidden;
-}
-
-.top-section{
-  min-height:20vh;
-  background:#000000;
-  display:flex;
+  display:inline-flex;
   align-items:center;
-  justify-content:center;
-  padding:28px 20px;
-  flex:0 0 20vh;
-  position:relative;
-  z-index:3;
+  gap:8px;
+  cursor:pointer;
+  color:#f3f4f6;
+  font-weight:800;
+  font-size:1.15rem;
+  margin-bottom:14px;
+  text-decoration:none;
 }
 
-.middle-section{
-  min-height:35vh;
-  background:#ffffff;  display:flex;
- align-items:flex-start;
-  justify-content:center;
-  padding:34px 20px 26px;
-  flex:0 0 auto;
-  position:relative;
-  z-index:4; /* tärkeä: tämä nostaa sisällön tumman yläosan päälle */
+.back:hover{opacity:.92}
+
+.page-title{
+  margin:0;
+  font-size:3rem;
+  line-height:1.05;
+  color:#fff;
 }
 
-.bottom-section{
-  flex:1 0 45vh;
-  min-height:45vh;
-  background:#000000;
-  position:relative;
-  z-index:0;   /* ✅ tärkeä muutos */
+.title-spacer{
+  width:1px;
+  min-height:1px;
 }
 
-/* ---------- CONTENT WRAPPERS ---------- */
-.content-wrap{
+.content-panel{
+  background:var(--white);
+  color:#111827;
+  padding:34px 20px 42px;
+}
+
+.content-inner{
   width:100%;
-  max-width:1100px;
+  max-width:1180px;
   margin:0 auto;
 }
 
-.subpage-offset{
-  margin-top:60px;
+.content-inner.narrow{
+  max-width:1000px;
 }
 
-.content-wrap.narrow{
-  max-width:980px;
-}
+
 
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit, minmax(220px, 220px));
-  gap:20px;
+  gap:28px;
   justify-content:center;
   align-items:start;
 }
-
-.category-page #categoryGrid{
-  margin-top:38px;
-  width:auto;
-}
-
-/* ---------- PAGE HEADERS ---------- */
-.page-header{
-  position:relative;
-  z-index:20;
-  margin-top:-120px;
-  margin-bottom:-2px;
-  padding-top:10px;
-}
-
-.page-header-drill{
-  position:relative;
-  z-index:20;
-  margin-top:-40px;
-  margin-bottom:-10px;
-  padding-top:10px;
-transform: translateY(-70px);
-}
-
-.drill-stage{
-  margin-top:-25px;
-}
-
-/* ---------- CARDS ---------- */
 
 .card{
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-
   width:220px;
-  min-height:140px;
-
-  
-  background:#000000;
-  border:1px solid #ff8200;
-  border-radius:22px;
+  min-height:160px;
+  background:var(--card-black);
+  border:1px solid var(--sandvik);
+  border-radius:30px;
   padding:2rem;
   cursor:pointer;
   text-align:center;
-  box-shadow:0 14px 34px rgba(0,0,0,.28);
-  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
-  font-weight:700;
-  color:#ffffff;
+  box-shadow:0 18px 40px rgba(0,0,0,.22);
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+  font-weight:800;
+  color:#fff;
 }
 
 .card:hover{
   transform:translateY(-4px);
-  background:#111111;
-  box-shadow:0 10px 25px rgba(0,0,0,.3);
-  
+  background:#111;
+  box-shadow:0 20px 44px rgba(0,0,0,.28);
 }
 
 .card small{
   display:block;
-  margin-top:.5rem;
-  color:#cbd5e1;
+  margin-top:.55rem;
+  color:#d0d6de;
   font-weight:500;
-  font-size:0.7rem;
+  font-size:.78rem;
 }
 
+.bit-band{
+  background:var(--black);
+  padding:22px 20px 34px;
+}
 
-/* ---------- TOOL SHELL ---------- */
+.bit-band-inner{
+  width:100%;
+  max-width:1180px;
+  margin:0 auto;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:180px;
+}
+
+.bit-image{
+  display:block;
+  width:min(760px, 88vw);
+  max-width:100%;
+  height:auto;
+  pointer-events:none;
+  user-select:none;
+}
+
 .app-shell{
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.012)),
-    var(--panel);
+  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.012)), var(--panel);
   border:1px solid rgba(255,255,255,.08);
-  border-radius:26px;
+  border-radius:28px;
   padding:1.8rem;
-  box-shadow:0 18px 40px rgba(0,0,0,.32);
-  margin-top:-6px;
+  box-shadow:0 18px 40px rgba(0,0,0,.22);
+  color:var(--text);
 }
 
-.block{
-  margin-bottom:1.8rem;
-}
+.block{margin-bottom:1.8rem}
+.block:last-child{margin-bottom:0}
 
 .block-title{
   font-size:1rem;
@@ -250,45 +219,41 @@ transform: translateY(-70px);
   font-weight:700;
 }
 
-/* ---------- POWER ---------- */
+.tool-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:12px;
+}
+
+.drill-name{
+  margin:0;
+  font-size:1.55rem;
+  font-weight:900;
+  color:#fff;
+}
+
 .power-wrap{
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)),
-    var(--panel2);
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)), var(--panel2);
   border:1px solid rgba(255,255,255,.06);
   border-radius:22px;
-  padding:.45rem 1rem .35rem;
+  padding:.8rem 1rem .7rem;
 }
 
 .power-header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:0px;
-}
-
-.power-label{
-  font-size:1rem;
-  color:#d1d5db;
-  font-weight:600;
+  margin-bottom:6px;
 }
 
 .power-value{
-  font-size:1.2rem;
-  margin-bottom:0px;
+  font-size:1.35rem;
   line-height:1;
   font-weight:800;
   letter-spacing:.5px;
   color:#ffffff;
-
-}
-
-.power-scale{
-  display:flex;
-  justify-content:space-between;
-  margin-top:.45rem;
-  font-size:.9rem;
-  color:#cbd5e1;
 }
 
 input[type=range]{
@@ -297,16 +262,8 @@ input[type=range]{
   height:8px;
   border-radius:6px;
   outline:none;
-
-  background:linear-gradient(
-    to right,
-    #22c55e 0%,
-    #22c55e 50%,
-    #eab308 65%,
-    #ef4444 100%
-  );
+  background:linear-gradient(to right,#22c55e 0%,#22c55e 50%,#eab308 65%,#ef4444 100%);
 }
-
 input[type=range]::-webkit-slider-thumb{
   -webkit-appearance:none;
   width:20px;
@@ -315,9 +272,8 @@ input[type=range]::-webkit-slider-thumb{
   background:#ffffff;
   border:2px solid #0f172a;
   cursor:pointer;
-margin-top:-6px;
+  margin-top:-6px;
 }
-
 input[type=range]::-moz-range-thumb{
   width:20px;
   height:20px;
@@ -326,14 +282,15 @@ input[type=range]::-moz-range-thumb{
   border:2px solid #0f172a;
   cursor:pointer;
 }
+
 .power-scale{
   display:flex;
   justify-content:space-between;
+  margin-top:.5rem;
+  font-size:.9rem;
+  color:#cbd5e1;
+  gap:18px;
 }
-
-
-
-/* ---------- PRESSURE CIRCLES ---------- */
 
 .pressure-grid{
   display:grid;
@@ -355,9 +312,7 @@ input[type=range]::-moz-range-thumb{
   padding:.75rem;
   background:linear-gradient(135deg,#60a5fa,#38bdf8);
   color:#03131d;
-  box-shadow:
-    0 14px 28px rgba(0,0,0,.28),
-    inset 0 2px 8px rgba(255,255,255,.15);
+  box-shadow:0 14px 28px rgba(0,0,0,.28), inset 0 2px 8px rgba(255,255,255,.15);
   flex:0 0 auto;
   transition:opacity .2s ease, filter .2s ease, transform .2s ease;
 }
@@ -369,35 +324,18 @@ input[type=range]::-moz-range-thumb{
   max-width:110px;
   margin-bottom:.35rem;
 }
+.pressure-number{font-size:2.05rem;line-height:1;font-weight:900;letter-spacing:.5px}
+.pressure-unit{font-size:.82rem;font-weight:800;margin-top:.25rem;opacity:.92}
+.dimmed{opacity:.42;filter:blur(1.1px) saturate(.8)}
 
-.pressure-number{
-  font-size:2.05rem;
-  line-height:1;
-  font-weight:900;
-  letter-spacing:.5px;
-}
-
-.pressure-unit{
-  font-size:.82rem;
-  font-weight:800;
-  margin-top:.25rem;
-  opacity:.92;
-}
-
-/* ---------- DIMMED ---------- */
-.dimmed{
-  opacity:.42;
-  filter:blur(1.1px) saturate(.8);
-}
-
-/* ---------- BIT BUTTONS ---------- */
 .bit-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:.8rem;
 }
 
-.bit-button{
+.bit-button,
+.mode-button{
   padding:1rem .6rem;
   border-radius:14px;
   background:#1e293b;
@@ -413,20 +351,21 @@ input[type=range]::-moz-range-thumb{
   color:#f8fafc;
 }
 
-.bit-button:hover{
+.bit-button:hover,
+.mode-button:hover{
   background:#334155;
   transform:translateY(-2px);
 }
 
-.bit-button.active{
-  background:linear-gradient(135deg,#38bdf8,#22c55e);
-  color:#03131d;
+.bit-button.active,
+.mode-button.active{
+  background:linear-gradient(135deg,#ffb259,#ff8200);
+  color:#111827;
   border-color:rgba(255,255,255,.25);
   transform:translateY(-2px) scale(1.02);
-  box-shadow:0 10px 22px rgba(34,197,94,.18), 0 0 0 4px var(--ring);
+  box-shadow:0 10px 22px rgba(255,130,0,.18), 0 0 0 4px var(--ring);
 }
 
-/* ---------- MODE BUTTONS ---------- */
 .mode-row{
   display:flex;
   justify-content:center;
@@ -438,38 +377,13 @@ input[type=range]::-moz-range-thumb{
 .mode-button{
   min-width:240px;
   padding:1rem 1.2rem;
-  border-radius:14px;
-  background:#1e293b;
-  text-align:center;
-  cursor:pointer;
   font-weight:800;
   font-size:1rem;
-  letter-spacing:.2px;
-  transition:.2s ease;
-  border:1px solid transparent;
-  user-select:none;
-  box-shadow:0 8px 18px rgba(0,0,0,.22);
-  color:#f8fafc;
-}
-
-.mode-button:hover{
-  background:#334155;
-  transform:translateY(-2px);
-}
-
-.mode-button.active{
-  background:linear-gradient(135deg,#38bdf8,#22c55e);
-  color:#03131d;
-  border-color:rgba(255,255,255,.25);
-  transform:translateY(-2px) scale(1.02);
-  box-shadow:0 10px 22px rgba(34,197,94,.18), 0 0 0 4px var(--ring);
 }
 
 .placeholder{
   margin-top:1rem;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)),
-    var(--panel2);
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)), var(--panel2);
   border:1px solid rgba(255,255,255,.06);
   border-radius:20px;
   padding:1.2rem;
@@ -477,217 +391,158 @@ input[type=range]::-moz-range-thumb{
   color:#d1d5db;
 }
 
-/* ---------- FLOATING BIT IMAGE ---------- */
-.home-bit-image{
-  position:absolute;
-  width:600px;
-
-  top:68%;
-  left:50%;
-
-  transform:translate(-50%, -50%);
-
-  z-index:5;
-
-  pointer-events:none;
-  user-select:none;
-
-}
-
 footer{
   text-align:center;
-  opacity:.55;
+  opacity:.6;
   font-size:.78rem;
   padding:1rem 0 2rem;
-  background:#000000;
-  color:#ffffff;
-
+  background:#000;
+  color:#fff;
 }
 
-/* ---------- MOBILE ---------- */
-
-/* TABLET */
 @media (max-width:1000px){
   .grid{
     grid-template-columns:repeat(2, minmax(220px, 1fr));
+    justify-items:center;
   }
-
-  .pressure-grid{
-    justify-content:center;
-  }
-
-  .card{
-    margin-left:auto;
-    margin-right:auto;
-  }
+  .card{margin-left:auto;margin-right:auto}
 }
 
-/* MOBILE */
 @media (max-width:700px){
-
-  /* ✅ BACK BUTTON (headerin sisään, sama korkeus logon kanssa) */
-.back {
-  position: fixed;
-  top: 12px;
-  left: 11px;
-  margin-top: 0;
-  z-index: 100;
+  .hero{
+    padding:16px 14px 14px;
   }
 
-  /* ✅ HEADER toimii oikein */
-  .page-header,
-  .page-header-drill {
-    position: relative;
-    margin-top: 0;
-    transform: none;
+  .brand{
+    gap:8px;
   }
 
-  /* ✅ GRID */
+  .logo{
+    width:230px;
+  }
+
+  .subtitle{
+    font-size:1rem;
+    text-align:center;
+  }
+
+  .title-row{
+    margin-top:16px;
+    display:block;
+  }
+
+  .back{
+    font-size:1rem;
+    margin-bottom:12px;
+  }
+
+  .page-title{
+    font-size:2.3rem;
+    line-height:1.08;
+    word-break:break-word;
+  }
+
+  .content-panel{
+    padding:22px 12px 28px;
+  }
+
+  .content-inner,
+  .content-inner.narrow{
+    max-width:none;
+  }
+
   .grid{
     grid-template-columns:1fr;
+    gap:18px;
     justify-items:center;
     width:100%;
   }
 
-  /* ✅ CARD */
   .card{
     width:100%;
+    max-width:340px;
+    min-height:128px;
+    border-radius:26px;
   }
 
-  /* ✅ SPACING */
-  .content-wrap{
-    padding:0 10px;
+  .bit-band{
+    padding:18px 12px 24px;
   }
 
-  .mode-button{
-    width:100%;
+  .bit-band-inner{
+    min-height:120px;
   }
 
-  /* ✅ TYPO */
-  .page-title{
-    font-size:1.4rem;
-    line-height:1.2;
+  .bit-image{
+    width:min(92vw, 560px);
   }
 
-  .page-header-drill .page-title{
-    font-size:1.2rem;
-    font-weight:700;
+  .app-shell{
+    padding:1rem;
+    border-radius:22px;
   }
 
-  /* ✅ BIT GRID */
-  .bit-grid{
-    grid-template-columns:repeat(2,1fr);
+  .tool-head{
+    display:block;
   }
 
-  /* ✅ POWER */
+  .drill-name{
+    font-size:1.25rem;
+    margin-bottom:8px;
+  }
+
   .power-value{
     font-size:1.6rem;
   }
 
-  /* ✅ PRESSURE */
+  .power-scale{
+    font-size:.78rem;
+    gap:10px;
+  }
+
+  .pressure-grid{
+    grid-template-columns:repeat(2, minmax(120px, 1fr));
+    gap:14px;
+  }
+
   .pressure-card{
-    width:130px;
-    height:130px;
+    width:128px;
+    height:128px;
   }
 
-  .pressure-number{
-    font-size:1.7rem;
+  .pressure-number{font-size:1.65rem}
+  .pressure-title,
+  .pressure-unit{font-size:.74rem}
+
+  .bit-grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:.65rem;
   }
 
-  .pressure-title{
-    font-size:.75rem;
+  .bit-button,
+  .mode-button{
+    font-size:.95rem;
   }
 
-  .pressure-unit{
-    font-size:.75rem;
+  .mode-row{
+    gap:.7rem;
   }
 
-  /* ✅ HARMAAT ALUEET KUNTOON */
-  .top-section{
-    min-height:110px;
-    flex-basis:auto;
+  .mode-button{
+    width:100%;
+    min-width:0;
   }
-
-  .middle-section{
-    min-height:auto;
-    padding:20px 10px;
-  }
-
-  .bottom-section{
-    min-height:160px;
-  }
-
-  /* ✅ LOGO */
-  .logo{
-    width:180px;
-  }
-
-  .subtitle{
-    font-size:1.05rem;
-  }
-
-  /* ✅ BIT IMAGE */
-.home-bit-image{
-  position:absolute;
-  width:220px;
-  bottom:0;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:1;
-  pointer-events:none;
-  user-select:none;
-
 }
-
-  /* ✅ EI NEGATIIVISIA SIIRTOJA */
-  .page-header{
-    margin-top:0;
-    margin-bottom:6px;
-  }
-
-  .page-header-drill{
-    margin-top:0;
-    margin-bottom:0;
-  }
-
-  .drill-stage{
-    margin-top:0;
-  }
-
-  .app-shell{
-    margin-top:0;
-  }
-
-  .page-header{
-  padding-left:90px;
-  min-height:50px;
-}
-
-.page-header-drill{
-  min-height:55px;
-}
-
-  .page-header,
-.page-header-drill {
-  margin-top: 0 !important;
-  transform: none !important;
-}
-
-}
-
 </style>
 </head>
-
 <body>
 <div id="app"></div>
 <footer>Sandvik Drilling Settings Tool – MVP</footer>
 
 <script>
-/* ---------- APP ROOT ---------- */
 const app = document.getElementById("app");
 let currentCategory = null;
 
-/* ---------- DATA ---------- */
 const categories = {
   longhole: {
     title: "Long Hole Drills",
@@ -707,7 +562,6 @@ const categories = {
   }
 };
 
-/* ---------- DRILL CONFIGS ---------- */
 const RD1740Config = {
   bits: [51, 57, 60, 64, 70, 76, 89],
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
@@ -780,7 +634,6 @@ const RD414Config = {
   frequency: { min: 56, max: 78, refMin: 110, refMax: 220 }
 };
 
-/* ---------- MAP ---------- */
 const drillConfigs = {
   RD1740: RD1740Config,
   RD927: RD927Config,
@@ -791,41 +644,56 @@ const drillConfigs = {
   RD314: RD314Config,
   RD414: RD414Config
 };
-/* ---------- SHARED PAGE LAYOUT ---------- */
-function renderLayout(contentHTML, options = {}){
-  const {
-    showBit = false,
-    bitSrc = "Bit.png",
-    narrow = false
-  } = options;
+
+function renderPage({ title = "", backAction = "", contentHTML = "", showBit = false, bitSrc = "Bit.png", narrow = false }){
+  const backHTML = backAction
+    ? `<div class="back" onclick="${backAction}">← Back</div>`
+    : "";
+
+  const titleHTML = title
+    ? `
+      <div class="title-row">
+        <div class="title-col">
+          ${backHTML}
+          <h1 class="page-title">${title}</h1>
+        </div>
+        <div class="title-spacer"></div>
+      </div>
+    `
+    : "";
 
   return `
-    <section class="app-layout ${options.category ? "category-page" : ""}">
-      <section class="top-section">
-        <div class="brand">
-          <img
-            class="logo"
-            src="https://media.mktg.workday.com/is/image/workday/customer-logo-sandvik-medium-2?fmt=png-alpha"
-            alt="Sandvik logo"
-          />
-          <div class="subtitle">Drilling Settings Tool</div>
+    <section class="app-layout">
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="brand">
+            <img
+              class="logo"
+              src="https://media.mktg.workday.com/is/image/workday/customer-logo-sandvik-medium-2?fmt=png-alpha"
+              alt="Sandvik logo"
+            />
+            <div class="subtitle">Drilling Settings Tool</div>
+          </div>
+          ${titleHTML}
         </div>
       </section>
 
-      <section class="middle-section">
-        <div class="content-wrap ${narrow ? "narrow" : ""}">
+      <section class="content-panel">
+        <div class="content-inner ${narrow ? "narrow" : ""}">
           ${contentHTML}
         </div>
       </section>
 
-      <section class="bottom-section"></section>
-
-      ${showBit ? `<img class="home-bit-image" src="${bitSrc}" alt="Drill bit" />` : ``}
+      ${showBit ? `
+        <section class="bit-band">
+          <div class="bit-band-inner">
+            <img class="bit-image" src="${bitSrc}" alt="Drill bit" />
+          </div>
+        </section>
+      ` : ""}
     </section>
   `;
 }
-
-/* ---------- HOME ---------- */
 
 function showHome(){
   const content = `
@@ -851,41 +719,40 @@ function showHome(){
     </div>
   `;
 
-  app.innerHTML = renderLayout(content, { showBit: true, bitSrc: "Bit.png" });
+  app.innerHTML = renderPage({
+  contentHTML: content,
+  showBit: true,
+  bitSrc: "Bit.png"
+});
 }
 
-/* ---------- CATEGORY ---------- */
 function openCategory(key){
   const category = categories[key];
   currentCategory = key;
 
   const content = `
-    <div class="page-header">
-      <div class="back" onclick="showHome()">← Back</div>
-      <h1 class="page-title">${category.title}</h1>
-    </div>
-
     <div class="grid" id="categoryGrid"></div>
   `;
 
-app.innerHTML = renderLayout(content, {
-  narrow: false,
+app.innerHTML = renderPage({
+  title: category.title,
+  backAction: "showHome()",
+  contentHTML: content,
   showBit: true,
-  bitSrc: "Bit.png",
-  category: true
+  bitSrc: "Bit.png"
 });
 
   const grid = document.getElementById("categoryGrid");
 
   if(key === "instructions"){
-  grid.innerHTML = `
-    <div class="card" onclick="window.open('i-series adjustment guide.pdf')">
-      Drilling Guide i-Series
-      <small>PDF file</small>
-    </div>
-  `;
-  return;
-}
+    grid.innerHTML = `
+      <div class="card" onclick="window.open('i-series adjustment guide.pdf')">
+        Drilling Guide i-Series
+        <small>PDF file</small>
+      </div>
+    `;
+    return;
+  }
 
   category.items.forEach(item => {
     const btn = document.createElement("div");
@@ -896,18 +763,18 @@ app.innerHTML = renderLayout(content, {
   });
 }
 
-/* ---------- DRILL ---------- */
 function openDrill(name){
   const content = `
-    <div class="page-header-drill">
-      <div class="back" onclick="openCategory('${currentCategory}')">← Back</div>
-     <!-- poistettu otsikko -->
-    </div>
-
-    <div id="drillContainer" class="drill-stage"></div>
+    <div id="drillContainer"></div>
   `;
 
-  app.innerHTML = renderLayout(content);
+  app.innerHTML = renderPage({
+    title: name,
+    backAction: `openCategory('${currentCategory}')`,
+    contentHTML: content,
+    narrow: true,
+    showBit: false
+  });
 
   const container = document.getElementById("drillContainer");
   const config = drillConfigs[name];
@@ -923,7 +790,6 @@ function openDrill(name){
   }
 }
 
-/* ---------- COMMON ---------- */
 function interpolate(min, max, percent){
   return Math.round(min + (max - min) * (percent / 100));
 }
@@ -939,7 +805,6 @@ function calculateRPM(freq, selectedBit){
   return Math.round((60 * freq * 7) / (Math.PI * selectedBit));
 }
 
-/* ---------- GENERIC DRILL MODULE ---------- */
 function renderDrillTool(container, config, drillName){
   const currentDrillName = drillName;
   let selectedBit = config.defaults.selectedBit;
@@ -949,50 +814,24 @@ function renderDrillTool(container, config, drillName){
   container.innerHTML = `
     <div class="app-shell">
       <div class="block">
- <div style="
-  position:relative;
-  display:flex;
-  align-items:flex-start;
-">
+        <div class="tool-head">
+          <div class="block-title">Drilling Power</div>
+          <h2 class="drill-name">${currentDrillName}</h2>
+        </div>
 
-  <div class="block-title">Drilling Power</div>
+        <div class="power-wrap">
+          <div class="power-header">
+            <div id="powerDisplay" class="power-value">${powerValue}%</div>
+          </div>
 
-  <div style="
-  position:absolute;
-  left:47%;
-  transform:translate(-50%, -20px);
-  font-size:1.2rem;
-  font-weight:900;
-  color:#ffffff;
-  pointer-events:none;
-">
-    ${currentDrillName}
-  </div>
+          <input id="powerSlider" type="range" min="0" max="100" value="${powerValue}">
 
-</div>
-    <div class="power-wrap">
-
-  <div class="power-header">
-    <div id="powerDisplay" class="power-value">${powerValue}%</div>
-  </div>
-
-  <input id="powerSlider" type="range" min="0" max="100" value="${powerValue}">
-
- <div style="
-  display:flex;
-  justify-content:space-between;
-  margin-top:0px;
-  font-size:.9rem;
-  color:#cbd5e1;
-  width:100%;
-">
-  <span>0% / Minimum</span>
-  <span>100% / Maximum</span>
-</div>
-  </div>
-
-</div>
-
+          <div class="power-scale">
+            <span>0% / Minimum</span>
+            <span>100% / Maximum</span>
+          </div>
+        </div>
+      </div>
 
       <div class="block">
         <div class="block-title">Pressure Values</div>
@@ -1048,19 +887,13 @@ function renderDrillTool(container, config, drillName){
   const feedValue = container.querySelector("#feedValue");
   const rpmValue = container.querySelector("#rpmValue");
   const bitOptions = container.querySelector("#bitOptions");
-
   const rotationCard = container.querySelector("#rotationCard");
   const feedCard = container.querySelector("#feedCard");
-
   const btnTorque = container.querySelector("#btnTorque");
   const btnFollow = container.querySelector("#btnFollow");
 
   function updateRotationTitle(){
-    if(mode === "torque"){
-      rotationTitle.textContent = "Rotation Target";
-    } else {
-      rotationTitle.textContent = "Rotation Pressure";
-    }
+    rotationTitle.textContent = mode === "torque" ? "Rotation Target" : "Rotation Pressure";
   }
 
   config.bits.forEach(size => {
@@ -1130,13 +963,14 @@ function renderDrillTool(container, config, drillName){
     }
 
     updateRotationTitle();
+    update();
   }
 
+  updateRotationTitle();
   update();
   updateMode();
 }
 
-/* ---------- START ---------- */
 showHome();
 </script>
 
