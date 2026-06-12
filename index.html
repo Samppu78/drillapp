@@ -12,7 +12,7 @@
 
 <style>
 :root{
-  --bg:#000000;
+  --bg:#ffffff; /* koko tausta valkoinen */
   --panel:#0b1220;
   --panel2:#18212f;
   --accent:#38bdf8;
@@ -27,8 +27,8 @@
   --bottom-gray:#1f2730;
 
   /* HOME / CATEGORY BIT IMAGE CONTROL */
-  --bit-width:800;
-  --bit-top:80%;
+  --bit-width:500px;
+  --bit-top:68%;
   --bit-left:50%;
 }
 
@@ -36,9 +36,6 @@
 
 html, body{
   height:100%;
-  margin:0;
-  padding:0;
-
 }
 
 body{
@@ -78,32 +75,25 @@ body{
   margin:0 0 .7rem 0;
   font-size:2.3rem;
   letter-spacing:.5px;
-  color:#000000;
-width:100%;
-text-align:center;
+  color:#ffffff;
 }
 
 .back{
   cursor:pointer;
   opacity:.95;
+  margin-bottom:.35rem;
+  display:inline-block;
   font-weight:800;
   font-size:1.16rem;
-  color:#ffffff;
-
-  position:absolute;
-  left:15px;
-  top:20px;
-
-  z-index:99999;
-
-  pointer-events:auto;
+  color:#f3f4f6;
+  position:relative;
+  z-index:30;
+margin-top:-10px;
 }
 
 .back:hover{
   opacity:1;
-  transform:scale(1.05);
 }
-
 
 /* ---------- SHARED LAYOUT ---------- */
 .app-layout{
@@ -115,24 +105,24 @@ text-align:center;
 }
 
 .top-section{
-  height:20vh;           /* 🔥 tärkein muutos */
+  min-height:20vh;
   background:#000000;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:28px 20px;
-  flex:0 0 auto;         /* 🔥 poistetaan lukittu flex */
+  flex:0 0 20vh;
   position:relative;
   z-index:3;
 }
+
 .middle-section{
   min-height:35vh;
-  background:#ffffff;
-  display:flex;
+  background:#ffffff;  display:flex;
  align-items:flex-start;
   justify-content:center;
-  padding:20px;
-  flex:0 0 35vh;
+  padding:34px 20px 26px;
+  flex:0 0 auto;
   position:relative;
   z-index:4; /* tärkeä: tämä nostaa sisällön tumman yläosan päälle */
 }
@@ -174,57 +164,28 @@ text-align:center;
 }
 
 /* ---------- PAGE HEADERS ---------- */
-
 .page-header{
   position:relative;
   z-index:20;
-
-  margin-top:-20px;
-  margin-bottom:10px;
-  padding-top:0;
-
-  width:100%;
-
-  display:block;        /* 🔥 tärkein muutos */
-  text-align:center;    /* 🔥 tämä keskittää oikein */
+  margin-top:-120px;
+  margin-bottom:-2px;
+  padding-top:10px;
 }
 
-.page-header h1{
-  margin:0;
-  display:block;
-  width:100%;
-  text-align:center;
-}
-
-/* ✅ category EI siirrä enää vinoon */
-.category-page .page-header{
-  margin-top:0;
-}
-
-/* ✅ Drill header sama logiikka */
 .page-header-drill{
   position:relative;
   z-index:20;
-  margin-top:0;
-  margin-bottom:10px;
+  margin-top:-40px;
+  margin-bottom:-10px;
   padding-top:10px;
-
-  width:100%;
-  display:block;
-  text-align:center;
+transform: translateY(-70px);
 }
 
-.page-header-drill h1{
-  margin:0;
-  width:100%;
-  text-align:center;
-}
-
-/* ✅ Mittariston sijainti */
 .drill-stage{
-  margin-top:120px;
+  margin-top:-25px;
+}
 
-}/* ---------- CARDS ---------- */
+/* ---------- CARDS ---------- */
 
 .card{
   display:flex;
@@ -266,47 +227,14 @@ text-align:center;
 
 /* ---------- TOOL SHELL ---------- */
 .app-shell{
-  
-background:
-  linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.01)),
-  linear-gradient(145deg, #161c22, #2e3943);
-
-
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.012)),
+    var(--panel);
   border:1px solid rgba(255,255,255,.08);
   border-radius:26px;
   padding:1.8rem;
-
-  /* 🔥 WOW EFFECT (depth + glow) */
-  box-shadow:
-    0 20px 45px rgba(0,0,0,.55),                 /* syvyys */
-    inset 0 1px 0 rgba(255,255,255,.06),         /* kevyt metallivalo */
-    inset 0 -3px 8px rgba(0,0,0,.4),             /* alareunan varjo */
-    0 0 20px rgba(255,130,0,.3);                /* 🔥 Sandvik orange glow */
-
+  box-shadow:0 18px 40px rgba(0,0,0,.32);
   margin-top:-6px;
-
-  position:relative;
-  overflow:hidden;
-}
-
-.app-shell::before{
-  content:"";
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-
-  background:
-    linear-gradient(
-      120deg,
-      transparent 0%,
-      rgba(255,255,255,.08) 40%,
-      transparent 70%
-    );
-
-  pointer-events:none;
-  opacity:.35;
 }
 
 .block{
@@ -551,18 +479,27 @@ input[type=range]::-moz-range-thumb{
 /* ---------- FLOATING BIT IMAGE ---------- */
 .home-bit-image{
   position:absolute;
-  width:var(--bit-width);
+  width:600px;
 
-  bottom:0;               /* ✅ sidotaan suoraan alareunaan */
+  top:68%;
   left:50%;
 
-  transform:translate(-50%, 60%);  /* ✅ nostetaan kuvaa sopivasti */
+  transform:translate(-50%, -50%);
 
-  z-index:999;
+  z-index:5;
 
   pointer-events:none;
   user-select:none;
 
+}
+
+footer{
+  text-align:center;
+  opacity:.55;
+  font-size:.78rem;
+  padding:1rem 0 2rem;
+  background:#000000;
+  color:#ffffff;
 
 }
 
@@ -587,57 +524,21 @@ input[type=range]::-moz-range-thumb{
 /* MOBILE */
 @media (max-width:700px){
 
-  /* ✅ BACK BUTTON */
-  .back {
-    position: absolute;
-    top: 12px;
-    left: 11px;
-    z-index: 100;
+  /* ✅ BACK BUTTON (headerin sisään, sama korkeus logon kanssa) */
+.back {
+  position: fixed;
+  top: 12px;
+  left: 11px;
+  margin-top: 0;
+  z-index: 100;
   }
 
-  /* ✅ HEADER */
+  /* ✅ HEADER toimii oikein */
   .page-header,
   .page-header-drill {
     position: relative;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    display:block;
-    text-align:center;
-  }
-
-  .page-title{
-    width:100%;
-    text-align:center;
-    font-size:1.4rem;
-    line-height:1.2;
-  }
-
-  .page-header-drill .page-title{
-    font-size:1.2rem;
-    font-weight:700;
-  }
-
-  /* ✅ CATEGORY FIX */
-  .category-page .page-header{
-    margin-top:0 !important;
-  }
-
-  .category-page #categoryGrid{
-    margin-top:25px !important;
-  }
-
-  /* ✅ LAYOUT */
-  .middle-section{
-    align-items:flex-start;
-    padding-top:15px;
-  }
-
-  .drill-stage{
-    margin-top:15px;
-  }
-
-  .app-shell{
-    margin-top:0;
+    margin-top: 0;
+    transform: none;
   }
 
   /* ✅ GRID */
@@ -659,6 +560,17 @@ input[type=range]::-moz-range-thumb{
 
   .mode-button{
     width:100%;
+  }
+
+  /* ✅ TYPO */
+  .page-title{
+    font-size:1.4rem;
+    line-height:1.2;
+  }
+
+  .page-header-drill .page-title{
+    font-size:1.2rem;
+    font-weight:700;
   }
 
   /* ✅ BIT GRID */
@@ -689,9 +601,10 @@ input[type=range]::-moz-range-thumb{
     font-size:.75rem;
   }
 
-  /* ✅ SECTIONS */
+  /* ✅ HARMAAT ALUEET KUNTOON */
   .top-section{
     min-height:110px;
+    flex-basis:auto;
   }
 
   .middle-section{
@@ -712,62 +625,45 @@ input[type=range]::-moz-range-thumb{
     font-size:1.05rem;
   }
 
-  /* ✅ 🔥 BIT SYSTEM (UUSI OIKEA RAKENNE) */
-
-  .bit-wrapper{
-    position:absolute;
-    bottom:0;
-    left:50%;
-    transform:translate(-50%, -110%);   /* 🔧 säädä tästä */
-    z-index:999;
-  }
-
+  /* ✅ BIT IMAGE */
   .home-bit-image{
-    position:relative;
-    z-index:2;
-    width:320px;   /* 🔧 säädä tästä */
+    width:220px;
+    top:72%;
   }
 
-  .bit-glow{
-    position:absolute;
-
-    width:360px;
-    height:360px;
-
-    left:50%;
-    top:50%;
-
-    transform:translate(-50%, -20%);
-
-    border-radius:50%;
-
-    background: radial-gradient(
-      circle,
-      rgba(255,130,0,0.7) 0%,
-      rgba(255,130,0,0.4) 40%,
-      rgba(255,130,0,0.15) 70%,
-      transparent 90%
-    );
-
-    z-index:1;
-  }
-
-  /* ✅ FINAL FIXES */
+  /* ✅ EI NEGATIIVISIA SIIRTOJA */
   .page-header{
-    padding-left:0;
-    min-height:50px;
-    width:100%;
-    text-align:center;
+    margin-top:0;
+    margin-bottom:6px;
   }
 
   .page-header-drill{
-    position:relative;
-    z-index:20;
-    min-height:55px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    margin-top:0;
+    margin-bottom:0;
   }
+
+  .drill-stage{
+    margin-top:0;
+  }
+
+  .app-shell{
+    margin-top:0;
+  }
+
+  .page-header{
+  padding-left:90px;
+  min-height:50px;
+}
+
+.page-header-drill{
+  min-height:55px;
+}
+
+  .page-header,
+.page-header-drill {
+  margin-top: 0 !important;
+  transform: none !important;
+}
 
 }
 
@@ -908,22 +804,19 @@ function renderLayout(contentHTML, options = {}){
         </div>
       </section>
 
-<section class="middle-section">
-  <div class="content-wrap ${narrow ? "narrow" : ""}">
-    ${contentHTML}
-  </div>
-</section>
+      <section class="middle-section">
+        <div class="content-wrap ${narrow ? "narrow" : ""}">
+          ${contentHTML}
+        </div>
+      </section>
 
-${options.backButton ? `
-<div class="back" onclick="${options.backAction}">← Back</div>
-` : ``}
+      <section class="bottom-section"></section>
 
-<section class="bottom-section"></section>
-
-${showBit ? `<img class="home-bit-image" src="${bitSrc}" alt="Drill bit" />` : ``}
-</section>
-`;
+      ${showBit ? `<img class="home-bit-image" src="${bitSrc}" alt="Drill bit" />` : ``}
+    </section>
+  `;
 }
+
 /* ---------- HOME ---------- */
 
 function showHome(){
@@ -959,23 +852,19 @@ function openCategory(key){
   currentCategory = key;
 
   const content = `
-  <div class="page-header">
-    <h1 class="page-title">${category.title}</h1>
-  </div>
+    <div class="page-header">
+      <div class="back" onclick="showHome()">← Back</div>
+      <h1 class="page-title">${category.title}</h1>
+    </div>
 
-  <div style="margin-top:20px;">
     <div class="grid" id="categoryGrid"></div>
-  </div>
-`;
-
+  `;
 
 app.innerHTML = renderLayout(content, {
   narrow: false,
   showBit: true,
   bitSrc: "Bit.png",
-  category: true,
-  backButton: true,
-  backAction: "showHome()"
+  category: true
 });
 
   const grid = document.getElementById("categoryGrid");
@@ -1003,16 +892,14 @@ app.innerHTML = renderLayout(content, {
 function openDrill(name){
   const content = `
     <div class="page-header-drill">
-      <h1 class="page-title">${name}</h1>
+      <div class="back" onclick="openCategory('${currentCategory}')">← Back</div>
+     <!-- poistettu otsikko -->
     </div>
 
     <div id="drillContainer" class="drill-stage"></div>
   `;
 
-  app.innerHTML = renderLayout(content, {
-    backButton: true,
-    backAction: "openCategory('" + currentCategory + "')"
-  });
+  app.innerHTML = renderLayout(content);
 
   const container = document.getElementById("drillContainer");
   const config = drillConfigs[name];
@@ -1027,6 +914,7 @@ function openDrill(name){
     `;
   }
 }
+
 /* ---------- COMMON ---------- */
 function interpolate(min, max, percent){
   return Math.round(min + (max - min) * (percent / 100));
@@ -1045,6 +933,7 @@ function calculateRPM(freq, selectedBit){
 
 /* ---------- GENERIC DRILL MODULE ---------- */
 function renderDrillTool(container, config, drillName){
+  const currentDrillName = drillName;
   let selectedBit = config.defaults.selectedBit;
   let powerValue = config.defaults.powerValue;
   let mode = config.defaults.mode;
@@ -1052,9 +941,28 @@ function renderDrillTool(container, config, drillName){
   container.innerHTML = `
     <div class="app-shell">
       <div class="block">
+ <div style="
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+">
+
   <div class="block-title">Drilling Power</div>
 
-  <div class="power-wrap">
+  <div style="
+  position:absolute;
+  left:47%;
+  transform:translate(-50%, -20px);
+  font-size:1.2rem;
+  font-weight:900;
+  color:#ffffff;
+  pointer-events:none;
+">
+    ${currentDrillName}
+  </div>
+
+</div>
+    <div class="power-wrap">
 
   <div class="power-header">
     <div id="powerDisplay" class="power-value">${powerValue}%</div>
