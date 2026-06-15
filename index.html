@@ -106,7 +106,7 @@ body{
 
 .page-title{
   margin:0;
-  font-size:3rem;
+  font-size:2.0rem;
   line-height:1.05;
   color:#fff;
 }
@@ -569,7 +569,7 @@ const categories = {
     items: ["RD1740", "RD927", "HL1560"]
   },
   face: {
-    title: "Face Drills",
+    title: "Development Drills",
     items: ["RDX5", "RD525", "RD535"]
   },
   bolting: {
@@ -583,39 +583,39 @@ const categories = {
 };
 
 const RD1740Config = {
-  bits: [51, 57, 60, 64, 70, 76, 89],
-  defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
-  feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
-  percussion: { label: "Percussion Pressure", unit: "bar", min: 110, max: 220 },
-  rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
-  frequency: { min: 56, max: 78, refMin: 110, refMax: 220 }
+  bits: [89, 102, 156, 202],
+  defaults: { selectedBit: 102, powerValue: 60, mode: "torque" },
+  feed: { label: "Feed Pressure", unit: "bar", min: 30, max: 100 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 220 },
+  rotation: { label: "Rotation Torque", unit: "bar", min: 35, max: 65 },
+  frequency: { min: 30, max: 38, refMin: 90, refMax: 220 }
 };
 
 const RD927Config = {
-  bits: [51, 57, 60, 64, 70, 76, 89],
-  defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
-  feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
-  percussion: { label: "Percussion Pressure", unit: "bar", min: 110, max: 220 },
+  bits: [89, 102, 156, 202],
+  defaults: { selectedBit: 102, powerValue: 60, mode: "torque" },
+  feed: { label: "Feed Pressure", unit: "bar", min: 30, max: 100 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 200 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
-  frequency: { min: 56, max: 78, refMin: 110, refMax: 220 }
+  frequency: { min: 45, max: 56, refMin: 100, refMax: 200 }
 };
 
 const HL1560Config = {
-  bits: [51, 57, 60, 64, 70, 76, 89],
-  defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
+  bits: bits: [89, 102, 115, 127, 156, 202],,
+  defaults: { selectedBit: 89, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
-  percussion: { label: "Percussion Pressure", unit: "bar", min: 110, max: 220 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 220 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
-  frequency: { min: 56, max: 78, refMin: 110, refMax: 220 }
+  frequency: { min: 30, max: 40, refMin: 100, refMax: 200 }
 };
 
 const RDX5Config = {
-  bits: [51, 57, 60, 64, 70, 76, 89],
+ bits: [41, 43, 45, 48, 51, 64, 76, 89],
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 110, max: 250 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
-  frequency: { min: 56, max: 78, refMin: 110, refMax: 220 }
+  frequency: { min: 50, max: 67, refMin: 110, refMax: 230 }
 };
 
 const RD525Config = {
@@ -628,7 +628,7 @@ const RD525Config = {
 };
 
 const RD535Config = {
-  bits: [51, 57, 60, 64, 70, 76, 89],
+ bits: [41, 43, 45, 48, 51, 64, 76, 89],
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 110, max: 220 },
@@ -637,12 +637,12 @@ const RD535Config = {
 };
 
 const RD314Config = {
-  bits: [51, 57, 60, 64, 70, 76, 89],
-  defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
-  feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
-  percussion: { label: "Percussion Pressure", unit: "bar", min: 110, max: 220 },
-  rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
-  frequency: { min: 56, max: 78, refMin: 110, refMax: 220 }
+  bits: [33, 35, 37, 41],
+  defaults: { selectedBit: 35, powerValue: 60, mode: "torque" },
+  feed: { label: "Feed Pressure", unit: "bar", min: 50, max: 110 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 180 },
+  rotation: { label: "Rotation Torque", unit: "bar", min: 45, max: 65 },
+  frequency: { min: 80, max: 110, refMin: 100, refMax: 180 }
 };
 
 const RD414Config = {
@@ -724,7 +724,7 @@ function showHome(){
       </div>
 
       <div class="card" onclick="openCategory('face')">
-        Face Drills
+        Development Drills
         <small>RDX5, RD525, RD535</small>
       </div>
 
@@ -764,14 +764,27 @@ app.innerHTML = renderPage({
 
   const grid = document.getElementById("categoryGrid");
 
-  if(key === "instructions"){
-    grid.innerHTML = `
-      <div class="card" onclick="window.open('i-series adjustment guide.pdf')">
-        Drilling Guide i-Series
-        <small>PDF file</small>
-      </div>
-    `;
-    return;
+ if(key === "instructions"){
+  grid.innerHTML = `
+
+<div class="card" onclick="window.open('Drilling App Guide.pdf')">
+      Drilling App Guide
+      <small>PDF file</small>
+    </div>
+
+    <div class="card" onclick="window.open('i-series adjustment guide.pdf')">
+      Drilling Guide i-Series
+      <small>PDF file</small>
+    </div>
+
+    <div class="card" onclick="window.open('Top Hammer Catalog.pdf')">
+      Top Hammer Catalog
+      <small>PDF file</small>
+    </div>
+
+  `;
+  return;
+
   }
 
   category.items.forEach(item => {
