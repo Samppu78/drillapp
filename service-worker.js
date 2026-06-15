@@ -7,7 +7,10 @@ const FILES_TO_CACHE = [
   "icon-192.png",
   "manifest.json",
   "i-series adjustment guide.pdf"
+  "Top Hammer Catalog.pdf"
+  "Drilling App Guide.pdf"
 ];
+
 
 // ✅ INSTALL
 self.addEventListener("install", (event) => {
