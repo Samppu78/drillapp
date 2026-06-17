@@ -429,6 +429,19 @@ footer{
 
 }
 
+.qr-corner {
+  position: fixed;
+  bottom: 20px;
+  right: 14px;
+  z-index: 99999;
+  cursor: pointer;
+}
+
+.qr-corner img {
+  width: 55px;
+  height: 55px;
+}
+
 /* Popup */
 #qr-popup {
   display: none;
@@ -443,8 +456,8 @@ footer{
 }
 
 #qr-popup img {
-  width: 150px;
-  height: 150px;
+  width: 250px;
+  height: 250px;
   background: white;
   padding: 10px;
   border-radius: 10px;
@@ -820,6 +833,10 @@ function renderPage({ title = "", backAction = "", contentHTML = "", showBit = f
 }
 
 function showHome(){
+
+  // ✅ PIILOTA QR AINA HOMEISSA
+  document.querySelector('.qr-corner').style.display = "none";
+
   const content = `
     <div class="grid">
       <div class="card" onclick="openCategory('longhole')">
@@ -852,6 +869,7 @@ function showHome(){
 
 function openCategory(key){
   const category = categories[key];
+  document.querySelector('.qr-corner').style.display = key === "instructions" ? "block" : "none";
   currentCategory = key;
 
   const content = `
