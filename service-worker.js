@@ -1,4 +1,4 @@
-const CACHE_NAME = "drilling-tool-v9";
+const CACHE_NAME = "drilling-tool-v10";
 
 const FILES_TO_CACHE = [
   "/",
@@ -6,11 +6,12 @@ const FILES_TO_CACHE = [
   "Bit.png",
   "icon-192.png",
   "manifest.json",
-  "iSeries Adjustment Guide.pdf"
-  "Top Hammer Catalog.pdf"
-  "Drilling App Guide.pdf"
+  "iSeries Adjustment Guide.pdf",
+  "Top Hammer Catalog.pdf",
+  "Drilling App Guide.pdf",
   "Failure Analysis Guide.pdf"
 ];
+
 
 
 // ✅ INSTALL
