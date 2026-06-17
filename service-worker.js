@@ -1,4 +1,4 @@
-const CACHE_NAME = "drilling-tool-v6";
+const CACHE_NAME = "drilling-tool-v6.1";
 
 const FILES_TO_CACHE = [
   "/",
