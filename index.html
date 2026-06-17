@@ -39,10 +39,12 @@ body{
   color:var(--text);
 }
 
-#app{min-height:100vh}
+#app{
+  min-height:100vh;
+}
 
 .app-layout{
-  min-height:100vh;
+  min-height:auto;
   background:var(--black);
 }
 
@@ -132,8 +134,6 @@ body{
   max-width:1000px;
 }
 
-
-
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit, minmax(220px, 220px));
@@ -157,18 +157,12 @@ body{
   padding:2rem;
   cursor:pointer;
   text-align:center;
-
-  /* ✅ TÄMÄ PITI OLLA MUKANA */
   color:#ffffff;
-
   box-shadow:0 18px 40px rgba(0,0,0,.22);
-
   transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
-
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ✅ Pieni teksti */
 .card small{
   display:block;
   margin-top:.5rem;
@@ -177,14 +171,12 @@ body{
   font-size:0.75rem;
 }
 
-/* ✅ Desktop hover */
 .card:hover{
   transform:translateY(-3px);
   background:#111;
   box-shadow:0 16px 34px rgba(0,0,0,.26);
 }
 
-/* ✅ Mobiili tap */
 .card:active{
   transform:scale(0.97);
   background:#111;
@@ -196,6 +188,7 @@ body{
   padding:22px 20px 34px;
 }
 
+
 .bit-band-inner{
   width:100%;
   max-width:1180px;
@@ -204,8 +197,10 @@ body{
   justify-content:center;
   align-items:center;
   min-height:180px;
-}
+  position: relative;
 
+ 
+}
 
 .bit-image{
   display:block;
@@ -214,9 +209,7 @@ body{
   height:auto;
   pointer-events:none;
   user-select:none;
-
   filter: drop-shadow(0 0 25px rgba(255,130,0,0.66));
-
 }
 
 .app-shell{
@@ -426,27 +419,21 @@ footer{
     justify-items:center;
   }
   .card{margin-left:auto;margin-right:auto}
-
 }
 
 .qr-corner {
-  position: fixed;
-  bottom: 20px;
-  right: 14px;
-  z-index: 99999;
-  cursor: pointer;
-  
-  /* ✅ tämä estää “liikkumisen” */
-  transform: translateZ(0);
-
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: none;
 }
 
 .qr-corner img {
   width: 55px;
   height: 55px;
+  display: block;
 }
 
-/* Popup */
 #qr-popup {
   display: none;
   position: fixed;
@@ -457,6 +444,7 @@ footer{
   background: rgba(0,0,0,0.6);
   justify-content: center;
   align-items: center;
+  z-index: 9999;
 }
 
 #qr-popup img {
@@ -465,7 +453,6 @@ footer{
   background: white;
   padding: 10px;
   border-radius: 10px;
-
 }
 
 @media (max-width:700px){
@@ -598,15 +585,6 @@ footer{
 <body>
 <div id="app"></div>
 
-<!-- ✅ QR GLOBAL -->
-<div class="qr-corner" onclick="toggleQR()">
-  <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://samppu78.github.io/drillapp/">
-</div>
-
-<div id="qr-popup" onclick="toggleQR()">
-  <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://samppu78.github.io/drillapp/">
-</div>
-
 <footer>Sandvik Drilling Settings Tool – MVP</footer>
 
 <script>
@@ -632,7 +610,6 @@ const categories = {
   }
 };
 
-
 const RD1740Config = {
   bits: [
     { size: 89, index: 9 },
@@ -648,7 +625,6 @@ const RD1740Config = {
   frequency: { min: 30, max: 38, refMin: 100, refMax: 220 }
 };
 
-
 const RD927Config = {
   bits: [
     { size: 89, index: 9 },
@@ -657,14 +633,12 @@ const RD927Config = {
     { size: 127, index: 11 },
     { size: 156, index: 11 }
   ],
-
   defaults: { selectedBit: 102, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 30, max: 100 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 200 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
   frequency: { min: 45, max: 56, refMin: 100, refMax: 200 }
 };
-
 
 const HL1560Config = {
   bits: [
@@ -674,14 +648,12 @@ const HL1560Config = {
     { size: 127, index: 11 },
     { size: 156, index: 11 }
   ],
-
   defaults: { selectedBit: 89, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 200 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
   frequency: { min: 35, max: 40, refMin: 100, refMax: 200 }
 };
-
 
 const RDX5Config = {
   bits: [
@@ -694,14 +666,12 @@ const RDX5Config = {
     { size: 76, index: 8 },
     { size: 89, index: 9 }
   ],
-
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 110, max: 250 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
   frequency: { min: 50, max: 67, refMin: 110, refMax: 230 }
 };
-
 
 const RD525Config = {
   bits: [
@@ -721,7 +691,6 @@ const RD525Config = {
   frequency: { min: 67, max: 92, refMin: 110, refMax: 230 }
 };
 
-
 const RD535Config = {
   bits: [
     { size: 41, index: 7 },
@@ -733,14 +702,12 @@ const RD535Config = {
     { size: 76, index: 8 },
     { size: 89, index: 9 }
   ],
-
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 110, max: 220 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
   frequency: { min: 56, max: 78, refMin: 110, refMax: 220 }
 };
-
 
 const RD314Config = {
   bits: [
@@ -749,14 +716,12 @@ const RD314Config = {
     { size: 37, index: 6 },
     { size: 41, index: 7 }
   ],
-
   defaults: { selectedBit: 35, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 50, max: 110 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 180 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 45, max: 65 },
   frequency: { min: 80, max: 110, refMin: 100, refMax: 180 }
 };
-
 
 const RD414Config = {
   bits: [
@@ -765,9 +730,7 @@ const RD414Config = {
     { size: 60, index: 7 },
     { size: 64, index: 8 },
     { size: 70, index: 8 }
-],
-
-
+  ],
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 110, max: 220 },
@@ -829,6 +792,14 @@ function renderPage({ title = "", backAction = "", contentHTML = "", showBit = f
         <section class="bit-band">
           <div class="bit-band-inner">
             <img class="bit-image" src="${bitSrc}" alt="Drill bit" />
+
+            <div class="qr-corner" onclick="toggleQR()">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://samppu78.github.io/drillapp/" alt="QR code">
+            </div>
+
+            <div id="qr-popup" onclick="toggleQR()">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://samppu78.github.io/drillapp/" alt="QR code large">
+            </div>
           </div>
         </section>
       ` : ""}
@@ -837,10 +808,6 @@ function renderPage({ title = "", backAction = "", contentHTML = "", showBit = f
 }
 
 function showHome(){
-
-  // ✅ PIILOTA QR AINA HOMEISSA
-  document.querySelector('.qr-corner').style.display = "none";
-
   const content = `
     <div class="grid">
       <div class="card" onclick="openCategory('longhole')">
@@ -865,58 +832,58 @@ function showHome(){
   `;
 
   app.innerHTML = renderPage({
-  contentHTML: content,
-  showBit: true,
-  bitSrc: "Bit.png"
-});
+    contentHTML: content,
+    showBit: true,
+    bitSrc: "Bit.png"
+  });
 }
 
 function openCategory(key){
   const category = categories[key];
-  document.querySelector('.qr-corner').style.display = key === "instructions" ? "block" : "none";
   currentCategory = key;
 
   const content = `
     <div class="grid" id="categoryGrid"></div>
   `;
 
-app.innerHTML = renderPage({
-  title: category.title,
-  backAction: "showHome()",
-  contentHTML: content,
-  showBit: true,
-  bitSrc: "Bit.png"
-});
+  app.innerHTML = renderPage({
+    title: category.title,
+    backAction: "showHome()",
+    contentHTML: content,
+    showBit: true,
+    bitSrc: "Bit.png"
+  });
+
+  const qr = document.querySelector('.qr-corner');
+  if (qr) {
+    qr.style.display = key === "instructions" ? "block" : "none";
+  }
 
   const grid = document.getElementById("categoryGrid");
 
-if(key === "instructions"){
-  grid.innerHTML = `
+  if(key === "instructions"){
+    grid.innerHTML = `
+      <div class="card" onclick="window.open('Drilling App Guide.pdf')">
+        Drilling App Guide
+        <small>PDF file</small>
+      </div>
 
-<div class="card" onclick="window.open('Drilling App Guide.pdf')">
-  Drilling App Guide
-  <small>PDF file</small>
-</div>
+      <div class="card" onclick="window.open('iSeries adjustment guide.pdf')">
+        Drilling Guide iSeries
+        <small>PDF file</small>
+      </div>
 
-<div class="card" onclick="window.open('iSeries adjustment guide.pdf')">
-  Drilling Guide iSeries
-  <small>PDF file</small>
-</div>
+      <div class="card" onclick="window.open('Top Hammer Catalog.pdf')">
+        Top Hammer Catalog
+        <small>PDF file</small>
+      </div>
 
-<div class="card" onclick="window.open('Top Hammer Catalog.pdf')">
-  Top Hammer Catalog
-  <small>PDF file</small>
-</div>
-
-<div class="card" onclick="window.open('Failure Analysis Guide.pdf')">
-  Rock Tools Failure Analysis Guide
-  <small>PDF file</small>
-</div>
-
-
-  `;
-  return;
-
+      <div class="card" onclick="window.open('Failure Analysis Guide.pdf')">
+        Rock Tools Failure Analysis Guide
+        <small>PDF file</small>
+      </div>
+    `;
+    return;
   }
 
   category.items.forEach(item => {
@@ -967,15 +934,11 @@ function calculateFrequency(percussionBar, config){
 }
 
 function calculateRPM(freq, selectedBit){
-  
-return Math.round((60 * freq * selectedBit.index) / (Math.PI * selectedBit.size));
+  return Math.round((60 * freq * selectedBit.index) / (Math.PI * selectedBit.size));
 }
 
 function renderDrillTool(container, config, drillName){
-  const currentDrillName = drillName;
- 
-let selectedBit = config.bits.find(b => b.size === config.defaults.selectedBit);
-
+  let selectedBit = config.bits.find(b => b.size === config.defaults.selectedBit);
   let powerValue = config.defaults.powerValue;
   let mode = config.defaults.mode;
 
@@ -984,7 +947,6 @@ let selectedBit = config.bits.find(b => b.size === config.defaults.selectedBit);
       <div class="block">
         <div class="tool-head">
           <div class="block-title">Drilling Power</div>
-          
         </div>
 
         <div class="power-wrap">
@@ -995,8 +957,8 @@ let selectedBit = config.bits.find(b => b.size === config.defaults.selectedBit);
           <input id="powerSlider" type="range" min="0" max="100" value="${powerValue}">
 
           <div class="power-scale">
-           <span>0% / Min</span>
-           <span>Max / 100%</span>
+            <span>0% / Min</span>
+            <span>Max / 100%</span>
           </div>
         </div>
       </div>
@@ -1064,24 +1026,24 @@ let selectedBit = config.bits.find(b => b.size === config.defaults.selectedBit);
     rotationTitle.textContent = mode === "torque" ? "Rotation Target" : "Rotation Pressure";
   }
 
-config.bits.forEach(bit => {
-  const btn = document.createElement("div");
-  btn.className = "bit-button";
-  btn.textContent = bit.size + " mm";
+  config.bits.forEach(bit => {
+    const btn = document.createElement("div");
+    btn.className = "bit-button";
+    btn.textContent = bit.size + " mm";
 
-  if(bit === selectedBit){
-    btn.classList.add("active");
-  }
+    if(bit === selectedBit){
+      btn.classList.add("active");
+    }
 
-  btn.onclick = () => {
-    selectedBit = bit;
-    bitOptions.querySelectorAll(".bit-button").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    update();
-  };
+    btn.onclick = () => {
+      selectedBit = bit;
+      bitOptions.querySelectorAll(".bit-button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      update();
+    };
 
-  bitOptions.appendChild(btn);
-});
+    bitOptions.appendChild(btn);
+  });
 
   btnTorque.onclick = () => {
     mode = "torque";
@@ -1139,13 +1101,13 @@ config.bits.forEach(bit => {
   updateMode();
 }
 
-showHome();
-
 function toggleQR() {
   const popup = document.getElementById("qr-popup");
+  if (!popup) return;
   popup.style.display = popup.style.display === "flex" ? "none" : "flex";
 }
 
+showHome();
 </script>
 
 <script>
@@ -1156,3 +1118,4 @@ if ('serviceWorker' in navigator) {
 
 </body>
 </html>
+``
