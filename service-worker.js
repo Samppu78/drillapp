@@ -6,7 +6,7 @@ const FILES_TO_CACHE = [
   "Bit.png",
   "icon-192.png",
   "manifest.json",
-  "iSeries adjustment guide.pdf"
+  "iSeries Adjustment Guide.pdf"
   "Top Hammer Catalog.pdf"
   "Drilling App Guide.pdf"
   "Failure Analysis Guide.pdf"
