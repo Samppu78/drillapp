@@ -8,7 +8,7 @@ const FILES_TO_CACHE = [
   "manifest.json",
   "i-series adjustment guide.pdf"
   "Top Hammer Catalog.pdf"
-  "Drill App Guide.pdf"
+  "Drilling App Guide.pdf"
   "Failure Analysis Guide.pdf"
 ];
 
