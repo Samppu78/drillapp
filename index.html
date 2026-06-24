@@ -457,9 +457,11 @@ input[type=range]::-moz-range-thumb{
   color:#cbd5e1;
 }
 
-.rock-button:hover{
-  background:#334155;
-  transform:translateY(-2px);
+@media (hover:hover) and (pointer:fine){
+  .rock-button:hover{
+    background:#334155;
+    transform:translateY(-2px);
+  }
 }
 
 .rock-button.active{
