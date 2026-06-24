@@ -209,8 +209,9 @@ body{
   filter: drop-shadow(0 0 25px rgba(255,130,0,0.66));
 }
 
+
 .app-shell{
-  background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.012)), var(--panel);
+  background:#000000;
   border:1px solid rgba(255,255,255,.08);
   border-radius:28px;
   padding:1.8rem;
@@ -320,11 +321,43 @@ input[type=range]::-moz-range-thumb{
   justify-content:center;
   text-align:center;
   padding:.75rem;
-  background:linear-gradient(135deg,#60a5fa,#38bdf8);
-  color:#03131d;
-  box-shadow:0 14px 28px rgba(0,0,0,.28), inset 0 2px 8px rgba(255,255,255,.15);
+
+  /* 🔷 UUSI SININEN + SYVYYS */
+  background:
+    radial-gradient(circle at 30% 25%, #1e4ed8 0%, #0b1f4d 70%);
+
+  color:#ffffff;
+
+  /* ⚡ SÄHKÖINEN HEHKU + SYVYYS */
+  box-shadow:
+    0 14px 28px rgba(0,0,0,.32),
+    inset 0 2px 12px rgba(255,255,255,.08),
+    0 0 18px rgba(30,78,216,0.35);
+
   flex:0 0 auto;
   transition:opacity .2s ease, filter .2s ease, transform .2s ease;
+
+  position:relative;
+  overflow:hidden;
+}
+
+/* ✨ LASIMAINEN HEIJASTUS */
+.pressure-card::before{
+  content:"";
+  position:absolute;
+  top:8%;
+  left:15%;
+  width:70%;
+  height:40%;
+  background:linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.25),
+    rgba(255,255,255,0.05),
+    transparent
+  );
+  border-radius:50%;
+  filter:blur(6px);
+  pointer-events:none;
 }
 
 .pressure-title{
@@ -334,16 +367,31 @@ input[type=range]::-moz-range-thumb{
   max-width:110px;
   margin-bottom:.35rem;
 }
-.pressure-number{font-size:2.05rem;line-height:1;font-weight:900;letter-spacing:.5px}
-.pressure-unit{font-size:.82rem;font-weight:800;margin-top:.25rem;opacity:.92}
-.dimmed{opacity:.42;filter:blur(1.1px) saturate(.8)}
+
+.pressure-number{
+  font-size:2.05rem;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.5px
+}
+
+.pressure-unit{
+  font-size:.82rem;
+  font-weight:800;
+  margin-top:.25rem;
+  opacity:.92
+}
+
+.dimmed{
+  opacity:.42;
+  filter:blur(1.1px) saturate(.8)
+}
 
 .bit-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:.8rem;
 }
-
 .bit-button,
 .mode-button{
   padding:1rem .6rem;
@@ -374,6 +422,56 @@ input[type=range]::-moz-range-thumb{
   border-color:rgba(255,255,255,.25);
   transform:translateY(-2px) scale(1.02);
   box-shadow:0 10px 22px rgba(255,130,0,.18), 0 0 0 4px var(--ring);
+}
+
+.rock-row{
+  display:flex;
+  justify-content:center;
+  gap:1rem;
+  flex-wrap:wrap;
+  margin-top:1rem;
+}
+
+.rock-button{
+  min-width:110px;
+  padding:0.6rem 0.8rem;
+  border-radius:12px;
+  font-size:0.9rem;
+  background:#1e293b;
+  text-align:center;
+  cursor:pointer;
+  font-weight:800;
+  letter-spacing:.2px;
+  transition:.2s ease;
+  border:1px solid transparent;
+  user-select:none;
+  box-shadow:0 8px 18px rgba(0,0,0,.22);
+  color:#f8fafc;
+}
+
+.rock-button small{
+  display:block;
+  margin-top:.25rem;
+  font-size:.78rem;
+  font-weight:700;
+  color:#cbd5e1;
+}
+
+.rock-button:hover{
+  background:#334155;
+  transform:translateY(-2px);
+}
+
+.rock-button.active{
+  background:linear-gradient(135deg,#ffb259,#ff8200);
+  color:#111827;
+  border-color:rgba(255,255,255,.25);
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 10px 22px rgba(255,130,0,.18), 0 0 0 4px var(--ring);
+}
+
+.rock-button.active small{
+  color:#111827;
 }
 
 .mode-row{
@@ -569,6 +667,15 @@ footer{
     font-size:.95rem;
   }
 
+  .rock-row{
+    gap:.7rem;
+  }
+
+  .rock-button{
+    width:100%;
+    min-width:0;
+  }
+
   .mode-row{
     gap:.7rem;
   }
@@ -583,9 +690,20 @@ footer{
 <body>
 <div id="app"></div>
 
-<footer>Sandvik Drilling Settings Tool – MVP</footer>
+<footer>
+  <span id="app-title">Sandvik Drilling Settings Tool – MVP</span>
+</footer>
 
 <script>
+const APP_VERSION = "1.0.1"; // muuta tätä jatkossa
+
+document.addEventListener("DOMContentLoaded", function() {
+  const title = document.getElementById("app-title");
+  if (title) {
+    title.innerHTML += "&nbsp;&nbsp;&nbsp;v." + APP_VERSION;
+  }
+});
+
 const app = document.getElementById("app");
 let currentCategory = null;
 
@@ -940,8 +1058,27 @@ function renderDrillTool(container, config, drillName){
   let powerValue = config.defaults.powerValue;
   let mode = config.defaults.mode;
 
+  const rockPresets = {
+    soft: 40,
+    medium: 65,
+    hard: 90
+  };
+
   container.innerHTML = `
     <div class="app-shell">
+      <div class="block">
+        <div class="tool-head">
+          <div class="block-title">Rock Condition</div>
+        </div>
+
+        <div class="rock-row">
+   <div id="btnSoft" class="rock-button">Soft</div>
+<div id="btnMedium" class="rock-button">Medium</div>
+<div id="btnHard" class="rock-button">Hard</div>
+
+        </div>
+      </div>
+
       <div class="block">
         <div class="tool-head">
           <div class="block-title">Drilling Power</div>
@@ -1020,6 +1157,37 @@ function renderDrillTool(container, config, drillName){
   const btnTorque = container.querySelector("#btnTorque");
   const btnFollow = container.querySelector("#btnFollow");
 
+  const btnSoft = container.querySelector("#btnSoft");
+  const btnMedium = container.querySelector("#btnMedium");
+  const btnHard = container.querySelector("#btnHard");
+  const rockButtons = [btnSoft, btnMedium, btnHard];
+
+  function clearRockSelection(){
+    rockButtons.forEach(btn => btn.classList.remove("active"));
+  }
+
+  function setRockCondition(condition, activeButton){
+    clearRockSelection();
+
+    activeButton.classList.add("active");
+    powerValue = rockPresets[condition];
+    powerSlider.value = powerValue;
+
+    update();
+  }
+
+  btnSoft.onclick = () => {
+    setRockCondition("soft", btnSoft);
+  };
+
+  btnMedium.onclick = () => {
+    setRockCondition("medium", btnMedium);
+  };
+
+  btnHard.onclick = () => {
+    setRockCondition("hard", btnHard);
+  };
+
   function updateRotationTitle(){
     rotationTitle.textContent = mode === "torque" ? "Rotation Target" : "Rotation Pressure";
   }
@@ -1059,6 +1227,9 @@ function renderDrillTool(container, config, drillName){
 
   powerSlider.addEventListener("input", e => {
     powerValue = Number(e.target.value);
+
+    clearRockSelection();
+
     update();
   });
 
