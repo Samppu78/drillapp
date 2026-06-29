@@ -697,7 +697,7 @@ footer{
 </footer>
 
 <script>
-const APP_VERSION = "1.0.2"; // muuta tätä jatkossa
+const APP_VERSION = "1.0.3"; // muuta tätä jatkossa
 
 document.addEventListener("DOMContentLoaded", function() {
   const title = document.getElementById("app-title");
@@ -712,7 +712,7 @@ let currentCategory = null;
 const categories = {
   longhole: {
     title: "Long Hole Drills",
-    items: ["RD1740", "RD927", "HL1560"]
+    items: ["RD1735", "RD927", "HL1560"]
   },
   face: {
     title: "Development Drills",
@@ -728,7 +728,7 @@ const categories = {
   }
 };
 
-const RD1740Config = {
+const RD1735Config = {
   bits: [
     { size: 89, index: 9 },
     { size: 102, index: 10 },
@@ -738,9 +738,9 @@ const RD1740Config = {
   ],
   defaults: { selectedBit: 102, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 30, max: 100 },
-  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 220 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 200 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 35, max: 65 },
-  frequency: { min: 30, max: 38, refMin: 100, refMax: 220 }
+  frequency: { min: 28, max: 39, refMin: 100, refMax: 200 }
 };
 
 const RD927Config = {
@@ -755,7 +755,7 @@ const RD927Config = {
   feed: { label: "Feed Pressure", unit: "bar", min: 30, max: 100 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 200 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
-  frequency: { min: 45, max: 56, refMin: 100, refMax: 200 }
+  frequency: { min: 42, max: 59, refMin: 100, refMax: 200 }
 };
 
 const HL1560Config = {
@@ -770,7 +770,7 @@ const HL1560Config = {
   feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 200 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
-  frequency: { min: 35, max: 40, refMin: 100, refMax: 200 }
+  frequency: { min: 28, max: 38, refMin: 100, refMax: 200 }
 };
 
 const RDX5Config = {
@@ -786,9 +786,9 @@ const RDX5Config = {
   ],
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
-  percussion: { label: "Percussion Pressure", unit: "bar", min: 110, max: 250 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 220 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
-  frequency: { min: 50, max: 67, refMin: 110, refMax: 230 }
+  frequency: { min: 46, max: 62, refMin: 100, refMax: 220 }
 };
 
 const RD525Config = {
@@ -804,9 +804,9 @@ const RD525Config = {
   ],
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 50, max: 140 },
-  percussion: { label: "Percussion Pressure", unit: "bar", min: 110, max: 230 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 230 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 45, max: 70 },
-  frequency: { min: 67, max: 92, refMin: 110, refMax: 230 }
+  frequency: { min: 62, max: 93, refMin: 100, refMax: 230 }
 };
 
 const RD535Config = {
@@ -822,9 +822,9 @@ const RD535Config = {
   ],
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
-  percussion: { label: "Percussion Pressure", unit: "bar", min: 110, max: 220 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 225 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
-  frequency: { min: 56, max: 78, refMin: 110, refMax: 220 }
+  frequency: { min: 72, max: 107, refMin: 100, refMax: 225 }
 };
 
 const RD314Config = {
@@ -838,7 +838,7 @@ const RD314Config = {
   feed: { label: "Feed Pressure", unit: "bar", min: 50, max: 110 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 180 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 45, max: 65 },
-  frequency: { min: 80, max: 110, refMin: 100, refMax: 180 }
+  frequency: { min: 82, max: 110, refMin: 100, refMax: 180 }
 };
 
 const RD414Config = {
@@ -851,13 +851,13 @@ const RD414Config = {
   ],
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
-  percussion: { label: "Percussion Pressure", unit: "bar", min: 110, max: 220 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 220 },
   rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
-  frequency: { min: 56, max: 78, refMin: 110, refMax: 220 }
+  frequency: { min: 52, max: 78, refMin: 100, refMax: 220 }
 };
 
 const drillConfigs = {
-  RD1740: RD1740Config,
+  RD1735: RD1740Config,
   RD927: RD927Config,
   HL1560: HL1560Config,
   RDX5: RDX5Config,
@@ -930,7 +930,7 @@ function showHome(){
     <div class="grid">
       <div class="card" onclick="openCategory('longhole')">
         Long Hole Drills
-        <small>RD927, RD1740, HL1560</small>
+        <small>RD927, RD1735, HL1560</small>
       </div>
 
       <div class="card" onclick="openCategory('face')">
