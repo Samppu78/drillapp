@@ -697,7 +697,7 @@ footer{
 </footer>
 
 <script>
-const APP_VERSION = "1.0.5"; // muuta tätä jatkossa
+const APP_VERSION = "1.0.6"; // muuta tätä jatkossa
 
 document.addEventListener("DOMContentLoaded", function() {
   const title = document.getElementById("app-title");
@@ -785,9 +785,9 @@ const RDX5Config = {
     { size: 89, index: 8 }
   ],
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
-  feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
+  feed: { label: "Feed Pressure", unit: "bar", min: 45, max: 125 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 220 },
-  rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
+  rotation: { label: "Rotation Torque", unit: "bar", min: 35, max: 60 },
   frequency: { min: 46, max: 62, refMin: 100, refMax: 220 }
 };
 
@@ -805,7 +805,7 @@ const RD525Config = {
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 50, max: 140 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 230 },
-  rotation: { label: "Rotation Torque", unit: "bar", min: 45, max: 70 },
+  rotation: { label: "Rotation Torque", unit: "bar", min: 40, max: 65 },
   frequency: { min: 62, max: 93, refMin: 100, refMax: 230 }
 };
 
@@ -821,9 +821,9 @@ const RD535Config = {
     { size: 89, index: 8 }
   ],
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
-  feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
+  feed: { label: "Feed Pressure", unit: "bar", min:50, max: 145 },
   percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 225 },
-  rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
+  rotation: { label: "Rotation Torque", unit: "bar", min: 40, max: 70 },
   frequency: { min: 72, max: 107, refMin: 100, refMax: 225 }
 };
 
