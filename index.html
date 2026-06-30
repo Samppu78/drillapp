@@ -697,7 +697,7 @@ footer{
 </footer>
 
 <script>
-const APP_VERSION = "1.0.6"; // muuta tätä jatkossa
+const APP_VERSION = "1.0.7"; // muuta tätä jatkossa
 
 document.addEventListener("DOMContentLoaded", function() {
   const title = document.getElementById("app-title");
@@ -730,11 +730,12 @@ const categories = {
 
 const RD1735Config = {
   bits: [
-   { size: 89, index: 10 },
-    { size: 102, index: 11 },
-    { size: 115, index: 11 },
-    { size: 127, index: 11 },
-    { size: 156, index: 11 }
+{ size: 89, index: 11 },
+    { size: 102, index: 12 },
+    { size: 115, index: 12 },
+    { size: 127, index: 12 },
+    { size: 156, index: 12 },
+    { size: 204, index: 12 }
   ],
   defaults: { selectedBit: 102, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 30, max: 100 },
@@ -745,11 +746,14 @@ const RD1735Config = {
 
 const RD927Config = {
   bits: [
-   { size: 89, index: 10 },
-    { size: 102, index: 11 },
-    { size: 115, index: 11 },
-    { size: 127, index: 11 },
-    { size: 156, index: 11 }
+{ size: 89, index: 11 },
+    { size: 102, index: 12 },
+    { size: 115, index: 12 },
+    { size: 127, index: 12 },
+    { size: 156, index: 12 },
+    { size: 204, index: 12 }
+
+
   ],
   defaults: { selectedBit: 102, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 30, max: 100 },
@@ -760,11 +764,14 @@ const RD927Config = {
 
 const HL1560Config = {
   bits: [
-    { size: 89, index: 10 },
-    { size: 102, index: 11 },
-    { size: 115, index: 11 },
-    { size: 127, index: 11 },
-    { size: 156, index: 11 }
+   { size: 89, index: 11 },
+    { size: 102, index: 12 },
+    { size: 115, index: 12 },
+    { size: 127, index: 12 },
+    { size: 156, index: 12 },
+    { size: 204, index: 12 }
+
+
   ],
   defaults: { selectedBit: 89, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
@@ -1400,7 +1407,45 @@ function openMaxRotationPopup(drillName){
   if (["RD314","RD414"].includes(drillName)) {
     groupName = "Bolting Drills";
   }
+let tableRows = "";
 
+if (groupName === "Development Drills") {
+  tableRows = `
+    <tr><td style="padding:8px;border:1px solid #444;">RD525</td><td style="padding:8px;border:1px solid #444;">OMS80</td><td style="padding:8px;border:1px solid #444;">400</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD525</td><td style="padding:8px;border:1px solid #444;">OMS125</td><td style="padding:8px;border:1px solid #444;">280</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD525</td><td style="padding:8px;border:1px solid #444;">OMS160</td><td style="padding:8px;border:1px solid #444;">225</td></tr>
+
+    <tr><td style="padding:8px;border:1px solid #444;">RDX5</td><td style="padding:8px;border:1px solid #444;">OMS80</td><td style="padding:8px;border:1px solid #444;">365</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RDX5</td><td style="padding:8px;border:1px solid #444;">OMS125</td><td style="padding:8px;border:1px solid #444;">265</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RDX5</td><td style="padding:8px;border:1px solid #444;">OMS160</td><td style="padding:8px;border:1px solid #444;">210</td></tr>
+
+    <tr><td style="padding:8px;border:1px solid #444;">RD535</td><td style="padding:8px;border:1px solid #444;">OMS125</td><td style="padding:8px;border:1px solid #444;">280</td></tr>
+  `;
+}
+
+if (groupName === "Long Hole Drills") {
+  tableRows = `
+    <tr><td style="padding:8px;border:1px solid #444;">RD927</td><td style="padding:8px;border:1px solid #444;">OMT315</td><td style="padding:8px;border:1px solid #444;">190</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD927</td><td style="padding:8px;border:1px solid #444;">OMT400</td><td style="padding:8px;border:1px solid #444;">150</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD927</td><td style="padding:8px;border:1px solid #444;">OMT500</td><td style="padding:8px;border:1px solid #444;">120</td></tr>
+
+    <tr><td style="padding:8px;border:1px solid #444;">RD1735</td><td style="padding:8px;border:1px solid #444;">OMT400</td><td style="padding:8px;border:1px solid #444;">150</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD1735</td><td style="padding:8px;border:1px solid #444;">OMT500</td><td style="padding:8px;border:1px solid #444;">120</td></tr>
+
+    <tr><td style="padding:8px;border:1px solid #444;">HL1560</td><td style="padding:8px;border:1px solid #444;">OMT400</td><td style="padding:8px;border:1px solid #444;">100</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">HL1560</td><td style="padding:8px;border:1px solid #444;">OMT500</td><td style="padding:8px;border:1px solid #444;">100</td></tr>
+  `;
+}
+
+if (groupName === "Bolting Drills") {
+  tableRows = `
+    <tr><td style="padding:8px;border:1px solid #444;">RD314</td><td style="padding:8px;border:1px solid #444;">OMS100</td><td style="padding:8px;border:1px solid #444;">530</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD314</td><td style="padding:8px;border:1px solid #444;">OMS125</td><td style="padding:8px;border:1px solid #444;">430</td></tr>
+
+    <tr><td style="padding:8px;border:1px solid #444;">RD414</td><td style="padding:8px;border:1px solid #444;">OMS160</td><td style="padding:8px;border:1px solid #444;">300</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD414</td><td style="padding:8px;border:1px solid #444;">OMS200</td><td style="padding:8px;border:1px solid #444;">240</td></tr>
+  `;
+}
   const existingPopup = document.getElementById("rotationPopup");
 
   if(existingPopup){
@@ -1434,62 +1479,31 @@ popup.innerHTML = `
       overflow-x:auto;
       margin-top:12px;
     ">
-      <table style="
-        width:100%;
-        border-collapse:collapse;
-        color:white;
-        font-size:14px;
-      ">
-        <tr style="background:#1d2b45;">
-          <th style="padding:8px;border:1px solid #444;">Rock Drill</th>
-          <th style="padding:8px;border:1px solid #444;">OMS</th>
-          <th style="padding:8px;border:1px solid #444;">Max RPM</th>
-        </tr>
+    <table style="
+  width:100%;
+  border-collapse:collapse;
+  color:white;
+  font-size:14px;
+">
+  <tr style="background:#1d2b45;">
+    <th style="padding:8px;border:1px solid #444;">Rock Drill</th>
+    <th style="padding:8px;border:1px solid #444;">OMS</th>
+    <th style="padding:8px;border:1px solid #444;">Max RPM</th>
+  </tr>
 
-        <tr>
-          <td style="padding:8px;border:1px solid #444;">RD525</td>
-          <td style="padding:8px;border:1px solid #444;">OMS80</td>
-          <td style="padding:8px;border:1px solid #444;">400</td>
-        </tr>
+  ${tableRows}
 
-        <tr>
-          <td style="padding:8px;border:1px solid #444;">RD525</td>
-          <td style="padding:8px;border:1px solid #444;">OMS125</td>
-          <td style="padding:8px;border:1px solid #444;">280</td>
-        </tr>
-
-        <tr>
-          <td style="padding:8px;border:1px solid #444;">RD525</td>
-          <td style="padding:8px;border:1px solid #444;">OMS160</td>
-          <td style="padding:8px;border:1px solid #444;">225</td>
-        </tr>
-
-        <tr>
-          <td style="padding:8px;border:1px solid #444;">RDX5</td>
-          <td style="padding:8px;border:1px solid #444;">OMS80</td>
-          <td style="padding:8px;border:1px solid #444;">365</td>
-        </tr>
-
-        <tr>
-          <td style="padding:8px;border:1px solid #444;">RDX5</td>
-          <td style="padding:8px;border:1px solid #444;">OMS125</td>
-          <td style="padding:8px;border:1px solid #444;">265</td>
-        </tr>
-
-        <tr>
-          <td style="padding:8px;border:1px solid #444;">RDX5</td>
-          <td style="padding:8px;border:1px solid #444;">OMS160</td>
-          <td style="padding:8px;border:1px solid #444;">210</td>
-        </tr>
-
-        <tr>
-          <td style="padding:8px;border:1px solid #444;">RD535</td>
-          <td style="padding:8px;border:1px solid #444;">OMS125</td>
-          <td style="padding:8px;border:1px solid #444;">280</td>
-        </tr>
-      </table>
+</table>
     </div>
-
+<div style="
+  margin-top:14px;
+  font-size:12px;
+  color:#cbd5e1;
+  line-height:1.4;
+">
+  Maximum RPM values are rotation motor specific maximum speeds.
+  Actual drilling RPM can be selected and optimized using the app.
+</div>
     <div style="margin-top:16px;text-align:right;">
       <button onclick="closeMaxRotationPopup()">
         Close
