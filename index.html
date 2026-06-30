@@ -782,7 +782,9 @@ const RDX5Config = {
     { size: 51, index: 7 },
     { size: 64, index: 8 },
     { size: 76, index: 8 },
-    { size: 89, index: 8 }
+    { size: 89, index: 8 },
+    { size: 102, index: 9 },
+    { size: 127, index: 9 }
   ],
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 45, max: 125 },
@@ -800,7 +802,9 @@ const RD525Config = {
     { size: 51, index: 7 },
     { size: 64, index: 8 },
     { size: 76, index: 8 },
-    { size: 89, index: 8 }
+    { size: 89, index: 8 },
+    { size: 102, index: 9 },
+    { size: 127, index: 9 }
   ],
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min: 50, max: 140 },
@@ -818,7 +822,9 @@ const RD535Config = {
     { size: 51, index: 7 },
     { size: 64, index: 8 },
     { size: 76, index: 8 },
-    { size: 89, index: 8 }
+    { size: 89, index: 8 },
+    { size: 102, index: 9 },
+    { size: 127, index: 9 }
   ],
   defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
   feed: { label: "Feed Pressure", unit: "bar", min:50, max: 145 },
@@ -1060,6 +1066,9 @@ function renderDrillTool(container, config, drillName){
   let powerValue = config.defaults.powerValue;
   let mode = config.defaults.mode;
 
+  let reamingActive = false;
+  const supportsReaming = !["RD314", "RD414"].includes(drillName);
+
   const rockPresets = {
     soft: 40,
     medium: 65,
@@ -1070,14 +1079,14 @@ function renderDrillTool(container, config, drillName){
     <div class="app-shell">
       <div class="block">
         <div class="tool-head">
-          <div class="block-title">Rock Condition</div>
+          <div class="block-title">Drilling Settings</div>
         </div>
 
         <div class="rock-row">
-   <div id="btnSoft" class="rock-button">Soft</div>
-<div id="btnMedium" class="rock-button">Medium</div>
-<div id="btnHard" class="rock-button">Hard</div>
-
+          <div id="btnSoft" class="rock-button">Soft</div>
+          <div id="btnMedium" class="rock-button">Medium</div>
+          <div id="btnHard" class="rock-button">Hard</div>
+          ${supportsReaming ? `<div id="btnReaming" class="rock-button">Reaming</div>` : ""}
         </div>
       </div>
 
@@ -1134,17 +1143,24 @@ function renderDrillTool(container, config, drillName){
         <div class="block-title">Drill Bit Diameter</div>
         <div id="bitOptions" class="bit-grid"></div>
 
-        <div class="mode-row">
-          <div id="btnTorque" class="mode-button ${mode === "torque" ? "active" : ""}">
-            Torque Control
-          </div>
-          <div id="btnFollow" class="mode-button ${mode === "follow" ? "active" : ""}">
-            Feed Percussion Follow Up
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+       <div class="mode-row">
+  <div id="btnTorque" class="mode-button ${mode === "torque" ? "active" : ""}">
+    Torque Control
+  </div>
+  <div id="btnFollow" class="mode-button ${mode === "follow" ? "active" : ""}">
+    Feed Percussion Follow Up
+  </div>
+</div>
+
+<div class="mode-row">
+  <div id="btnMaxRotationSpeed" class="mode-button">
+    Max. Rotation Speed / OMS Rotation Motors
+  </div>
+</div>
+
+</div>
+</div>
+`;
 
   const powerSlider = container.querySelector("#powerSlider");
   const powerDisplay = container.querySelector("#powerDisplay");
@@ -1158,22 +1174,63 @@ function renderDrillTool(container, config, drillName){
   const feedCard = container.querySelector("#feedCard");
   const btnTorque = container.querySelector("#btnTorque");
   const btnFollow = container.querySelector("#btnFollow");
+  const btnMaxRotationSpeed = container.querySelector("#btnMaxRotationSpeed");
 
   const btnSoft = container.querySelector("#btnSoft");
   const btnMedium = container.querySelector("#btnMedium");
   const btnHard = container.querySelector("#btnHard");
-  const rockButtons = [btnSoft, btnMedium, btnHard];
+  const btnReaming = container.querySelector("#btnReaming");
 
-  function clearRockSelection(){
-    rockButtons.forEach(btn => btn.classList.remove("active"));
+  const normalRockButtons = [btnSoft, btnMedium, btnHard];
+  const allPresetButtons = [btnSoft, btnMedium, btnHard, btnReaming].filter(Boolean);
+
+  function clearAllPresetSelections(){
+    allPresetButtons.forEach(btn => btn.classList.remove("active"));
+    reamingActive = false;
+  }
+
+  function clearNormalRockSelections(){
+    normalRockButtons.forEach(btn => btn.classList.remove("active"));
+  }
+
+  function resetBitToDefault(){
+    const defaultBit = config.bits.find(
+      b => b.size === config.defaults.selectedBit
+    );
+
+    if (defaultBit) {
+      selectedBit = defaultBit;
+      refreshBitButtons();
+    }
+  }
+
+  function refreshBitButtons(){
+    bitOptions.querySelectorAll(".bit-button").forEach(btn => {
+      btn.classList.remove("active");
+
+      if (btn.textContent === `${selectedBit.size} mm`) {
+        btn.classList.add("active");
+      }
+    });
   }
 
   function setRockCondition(condition, activeButton){
-    clearRockSelection();
+    const wasAlreadyActive = activeButton.classList.contains("active");
+
+    clearAllPresetSelections();
+
+    if (wasAlreadyActive) {
+      resetBitToDefault();
+      update();
+      return;
+    }
 
     activeButton.classList.add("active");
+
     powerValue = rockPresets[condition];
     powerSlider.value = powerValue;
+
+    resetBitToDefault();
 
     update();
   }
@@ -1189,6 +1246,47 @@ function renderDrillTool(container, config, drillName){
   btnHard.onclick = () => {
     setRockCondition("hard", btnHard);
   };
+
+  if (btnReaming) {
+    btnReaming.onclick = () => {
+      const wasAlreadyActive = btnReaming.classList.contains("active");
+
+      clearAllPresetSelections();
+
+      if (wasAlreadyActive) {
+        resetBitToDefault();
+        update();
+        return;
+      }
+
+      btnReaming.classList.add("active");
+      reamingActive = true;
+
+      powerValue = 50;
+      powerSlider.value = powerValue;
+
+      let reamingBitSize = null;
+
+      if (["RD525", "RD535", "RDX5"].includes(drillName)) {
+        reamingBitSize = 102;
+      }
+
+      if (["RD1735", "RD927", "HL1560"].includes(drillName)) {
+        reamingBitSize = 156;
+      }
+
+      if (reamingBitSize !== null) {
+        const foundBit = config.bits.find(b => b.size === reamingBitSize);
+
+        if (foundBit) {
+          selectedBit = foundBit;
+          refreshBitButtons();
+        }
+      }
+
+      update();
+    };
+  }
 
   function updateRotationTitle(){
     rotationTitle.textContent = mode === "torque" ? "Rotation Target" : "Rotation Pressure";
@@ -1227,10 +1325,16 @@ function renderDrillTool(container, config, drillName){
     updateMode();
   };
 
+btnMaxRotationSpeed.onclick = () => {
+  openMaxRotationPopup(drillName);
+};
+
   powerSlider.addEventListener("input", e => {
     powerValue = Number(e.target.value);
 
-    clearRockSelection();
+    if (!reamingActive) {
+      clearNormalRockSelections();
+    }
 
     update();
   });
@@ -1238,7 +1342,12 @@ function renderDrillTool(container, config, drillName){
   function update(){
     powerDisplay.textContent = `${powerValue}%`;
 
-    const rotationBar = interpolate(config.rotation.min, config.rotation.max, powerValue);
+    let rotationBar = interpolate(config.rotation.min, config.rotation.max, powerValue);
+
+    if (reamingActive) {
+      rotationBar = Math.round(rotationBar * 1.10);
+    }
+
     const percussionBar = interpolate(config.percussion.min, config.percussion.max, powerValue);
     const feedBar = interpolate(config.feed.min, config.feed.max, powerValue);
 
@@ -1271,13 +1380,133 @@ function renderDrillTool(container, config, drillName){
   update();
   updateMode();
 }
-
 function toggleQR() {
   const popup = document.getElementById("qr-popup");
   if (!popup) return;
   popup.style.display = popup.style.display === "flex" ? "none" : "flex";
 }
+function openMaxRotationPopup(drillName){
 
+  let groupName = "";
+
+  if (["RD1735","RD927","HL1560"].includes(drillName)) {
+    groupName = "Long Hole Drills";
+  }
+
+  if (["RDX5","RD525","RD535"].includes(drillName)) {
+    groupName = "Development Drills";
+  }
+
+  if (["RD314","RD414"].includes(drillName)) {
+    groupName = "Bolting Drills";
+  }
+
+  const existingPopup = document.getElementById("rotationPopup");
+
+  if(existingPopup){
+    existingPopup.remove();
+  }
+
+  const popup = document.createElement("div");
+
+  popup.id = "rotationPopup";
+
+  popup.style.position = "fixed";
+  popup.style.inset = "0";
+  popup.style.background = "rgba(0,0,0,0.75)";
+  popup.style.display = "flex";
+  popup.style.alignItems = "center";
+  popup.style.justifyContent = "center";
+  popup.style.zIndex = "9999";
+
+popup.innerHTML = `
+  <div style="
+    background:#050505;
+    color:white;
+    padding:24px;
+    border-radius:20px;
+    width:min(90vw,600px);
+    border:1px solid #ff8200;
+  ">
+    <h3>${groupName}</h3>
+
+    <div style="
+      overflow-x:auto;
+      margin-top:12px;
+    ">
+      <table style="
+        width:100%;
+        border-collapse:collapse;
+        color:white;
+        font-size:14px;
+      ">
+        <tr style="background:#1d2b45;">
+          <th style="padding:8px;border:1px solid #444;">Rock Drill</th>
+          <th style="padding:8px;border:1px solid #444;">OMS</th>
+          <th style="padding:8px;border:1px solid #444;">Max RPM</th>
+        </tr>
+
+        <tr>
+          <td style="padding:8px;border:1px solid #444;">RD525</td>
+          <td style="padding:8px;border:1px solid #444;">OMS80</td>
+          <td style="padding:8px;border:1px solid #444;">400</td>
+        </tr>
+
+        <tr>
+          <td style="padding:8px;border:1px solid #444;">RD525</td>
+          <td style="padding:8px;border:1px solid #444;">OMS125</td>
+          <td style="padding:8px;border:1px solid #444;">280</td>
+        </tr>
+
+        <tr>
+          <td style="padding:8px;border:1px solid #444;">RD525</td>
+          <td style="padding:8px;border:1px solid #444;">OMS160</td>
+          <td style="padding:8px;border:1px solid #444;">225</td>
+        </tr>
+
+        <tr>
+          <td style="padding:8px;border:1px solid #444;">RDX5</td>
+          <td style="padding:8px;border:1px solid #444;">OMS80</td>
+          <td style="padding:8px;border:1px solid #444;">365</td>
+        </tr>
+
+        <tr>
+          <td style="padding:8px;border:1px solid #444;">RDX5</td>
+          <td style="padding:8px;border:1px solid #444;">OMS125</td>
+          <td style="padding:8px;border:1px solid #444;">265</td>
+        </tr>
+
+        <tr>
+          <td style="padding:8px;border:1px solid #444;">RDX5</td>
+          <td style="padding:8px;border:1px solid #444;">OMS160</td>
+          <td style="padding:8px;border:1px solid #444;">210</td>
+        </tr>
+
+        <tr>
+          <td style="padding:8px;border:1px solid #444;">RD535</td>
+          <td style="padding:8px;border:1px solid #444;">OMS125</td>
+          <td style="padding:8px;border:1px solid #444;">280</td>
+        </tr>
+      </table>
+    </div>
+
+    <div style="margin-top:16px;text-align:right;">
+      <button onclick="closeMaxRotationPopup()">
+        Close
+      </button>
+    </div>
+  </div>
+`;
+  document.body.appendChild(popup);
+}
+
+function closeMaxRotationPopup(){
+  const popup = document.getElementById("rotationPopup");
+
+  if(popup){
+    popup.remove();
+  }
+}
 showHome();
 </script>
 
