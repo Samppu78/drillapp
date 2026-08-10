@@ -303,6 +303,102 @@ input[type=range]::-moz-range-thumb{
   gap:18px;
 }
 
+
+.direction-wrap{
+  margin-top:14px;
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)), var(--panel2);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:22px;
+  padding:.8rem 1rem .7rem;
+  transition:opacity .2s ease, filter .2s ease;
+}
+
+.direction-wrap.direction-dimmed{
+  opacity:.42;
+  filter:blur(1.1px) saturate(.8);
+}
+
+.direction-header{
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
+  margin-bottom:6px;
+}
+
+.direction-slider{
+  -webkit-appearance:none;
+  appearance:none;
+  width:100%;
+  height:8px;
+  border-radius:6px;
+  outline:none;
+  cursor:pointer;
+  touch-action:none;
+  background:linear-gradient(to right,#22c55e 0%,#16a34a 35%,#0ea5e9 70%,#2563eb 100%) !important;
+}
+
+.direction-slider::-webkit-slider-runnable-track{
+  width:100%;
+  height:8px;
+  border-radius:6px;
+  background:linear-gradient(to right,#22c55e 0%,#16a34a 35%,#0ea5e9 70%,#2563eb 100%);
+}
+
+.direction-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  appearance:none;
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:#ffffff;
+  border:2px solid #0f172a;
+  cursor:grab;
+  margin-top:-8px;
+}
+
+.direction-slider:active::-webkit-slider-thumb{
+  cursor:grabbing;
+}
+
+.direction-slider::-moz-range-track{
+  width:100%;
+  height:8px;
+  border-radius:6px;
+  background:linear-gradient(to right,#22c55e 0%,#16a34a 35%,#0ea5e9 70%,#2563eb 100%);
+}
+
+.direction-slider::-moz-range-thumb{
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:#ffffff;
+  border:2px solid #0f172a;
+  cursor:grab;
+}
+
+
+.direction-slider:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.direction-slider:disabled::-webkit-slider-thumb{
+  cursor:not-allowed;
+}
+
+.direction-slider:disabled::-moz-range-thumb{
+  cursor:not-allowed;
+}
+
+.direction-scale{
+  display:flex;
+  justify-content:space-between;
+  margin-top:.5rem;
+  font-size:.9rem;
+  color:#cbd5e1;
+  gap:18px;
+}
+
 .pressure-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
@@ -1072,8 +1168,10 @@ function renderDrillTool(container, config, drillName){
   let selectedBit = config.bits.find(b => b.size === config.defaults.selectedBit);
   let powerValue = config.defaults.powerValue;
   let mode = config.defaults.mode;
+  let directionAngle = 0;
 
   let reamingActive = false;
+  const isDL = ["RD1735", "RD927", "HL1560"].includes(drillName);
   const supportsReaming = !["RD314", "RD414"].includes(drillName);
 
   const rockPresets = {
@@ -1114,6 +1212,34 @@ function renderDrillTool(container, config, drillName){
             <span>Max / 100%</span>
           </div>
         </div>
+
+
+        ${isDL ? `
+          <div class="tool-head" style="margin-top:14px;">
+            <div class="block-title">Drilling Angle</div>
+          </div>
+
+          <div id="directionWrap" class="direction-wrap" style="margin-top:0;">
+            <div class="direction-header">
+              <div id="directionDisplay" class="power-value">0°</div>
+            </div>
+
+            <input
+              id="directionSlider"
+              class="direction-slider"
+              type="range"
+              min="0"
+              max="180"
+              step="1"
+              value="0"
+            >
+
+            <div class="direction-scale">
+              <span>0° / Up</span>
+              <span>Down / 180°</span>
+            </div>
+          </div>
+        ` : ""}
       </div>
 
       <div class="block">
@@ -1171,6 +1297,9 @@ function renderDrillTool(container, config, drillName){
 
   const powerSlider = container.querySelector("#powerSlider");
   const powerDisplay = container.querySelector("#powerDisplay");
+  const directionWrap = container.querySelector("#directionWrap");
+  const directionSlider = container.querySelector("#directionSlider");
+  const directionDisplay = container.querySelector("#directionDisplay");
   const rotationTitle = container.querySelector("#rotationTitle");
   const rotationValue = container.querySelector("#rotationValue");
   const percussionValue = container.querySelector("#percussionValue");
@@ -1346,8 +1475,20 @@ btnMaxRotationSpeed.onclick = () => {
     update();
   });
 
+
+  if (directionSlider) {
+    directionSlider.addEventListener("input", e => {
+      directionAngle = Number(e.target.value);
+      update();
+    });
+  }
+
   function update(){
     powerDisplay.textContent = `${powerValue}%`;
+
+    if (directionDisplay) {
+      directionDisplay.textContent = `${directionAngle}°`;
+    }
 
     let rotationBar = interpolate(config.rotation.min, config.rotation.max, powerValue);
 
@@ -1356,7 +1497,16 @@ btnMaxRotationSpeed.onclick = () => {
     }
 
     const percussionBar = interpolate(config.percussion.min, config.percussion.max, powerValue);
-    const feedBar = interpolate(config.feed.min, config.feed.max, powerValue);
+    const powerFeed = interpolate(config.feed.min, config.feed.max, powerValue);
+
+    let feedBar = powerFeed;
+
+    if (isDL) {
+      const minimumDownFeed = config.feed.min + 5;
+      feedBar = Math.round(
+        powerFeed + (minimumDownFeed - powerFeed) * (directionAngle / 180)
+      );
+    }
 
     rotationValue.textContent = rotationBar;
     percussionValue.textContent = percussionBar;
@@ -1377,6 +1527,22 @@ btnMaxRotationSpeed.onclick = () => {
 
     if(mode === "follow"){
       rotationCard.classList.add("dimmed");
+    }
+
+    if (directionWrap) {
+      const torqueMode = mode === "torque";
+
+      directionWrap.classList.toggle("direction-dimmed", torqueMode);
+
+      if (directionSlider) {
+        if (torqueMode) {
+          directionAngle = 0;
+          directionSlider.value = 0;
+          directionSlider.disabled = true;
+        } else {
+          directionSlider.disabled = false;
+        }
+      }
     }
 
     updateRotationTitle();
