@@ -572,6 +572,15 @@ input[type=range]::-moz-range-thumb{
   color:#111827;
 }
 
+.rock-button.disabled{
+  opacity:.32;
+  filter:blur(1.1px) grayscale(100%) saturate(.7);
+  cursor:not-allowed;
+  pointer-events:none;
+  box-shadow:none;
+  transform:none;
+}
+
 .mode-row{
   display:flex;
   justify-content:center;
@@ -793,7 +802,7 @@ footer{
 </footer>
 
 <script>
-const APP_VERSION = "1.0.8"; // muuta tätä jatkossa
+const APP_VERSION = "1.0.9"; // muuta tätä jatkossa
 
 document.addEventListener("DOMContentLoaded", function() {
   const title = document.getElementById("app-title");
@@ -976,6 +985,24 @@ const drillConfigs = {
   RD414: RD414Config
 };
 
+
+const torqueData = {
+  "RD314/RD315": {
+    OMS100: 340,
+    OMS125: 420
+  },
+  RD525: {
+    OMS80: 400,
+    OMS125: 625,
+    OMS160: 700
+  },
+  RDX5: {
+    OMS80: 400,
+    OMS125: 625,
+    OMS160: 780
+  }
+};
+
 function renderPage({ title = "", backAction = "", contentHTML = "", showBit = false, bitSrc = "Bit.png", narrow = false }){
   const backHTML = backAction
     ? `<div class="back" onclick="${backAction}">← Back</div>`
@@ -1050,6 +1077,11 @@ function showHome(){
       <div class="card" onclick="openCategory('bolting')">
         Bolting Drills
         <small>RD314, RD414</small>
+      </div>
+
+      <div class="card" onclick="openTorqueCalculator()">
+        Bolt Nut Tightening Torque
+        <small>RD314, RD315, RD525, RDX5</small>
       </div>
 
       <div class="card" onclick="openCategory('instructions')">
@@ -1553,6 +1585,151 @@ btnMaxRotationSpeed.onclick = () => {
   update();
   updateMode();
 }
+function openTorqueCalculator(){
+  const content = `
+    <div id="torqueCalculatorContainer"></div>
+  `;
+
+  app.innerHTML = renderPage({
+    title: "Nut Tightening Calculator",
+    backAction: "showHome()",
+    contentHTML: content,
+    narrow: true,
+    showBit: false
+  });
+
+  renderTorqueCalculator(document.getElementById("torqueCalculatorContainer"));
+}
+
+function renderTorqueCalculator(container){
+  const REFERENCE_PRESSURE_BAR = 175;
+  const FT_LB_PER_NM = 0.737562149;
+
+  let pressureBar = 100;
+  let selectedDrill = "RD525";
+  let selectedMotor = "OMS125";
+
+  container.innerHTML = `
+    <div class="app-shell">
+      <div class="block">
+        <div class="block-title">Rotation Pressure</div>
+        <div class="power-wrap">
+          <div class="power-header">
+            <div id="torquePressureDisplay" class="power-value">${pressureBar} bar</div>
+          </div>
+          <input id="torquePressureSlider" type="range" min="0" max="180" step="1" value="${pressureBar}" aria-label="Rotation pressure">
+          <div class="power-scale">
+            <span>0 bar / Min</span>
+            <span>Max / 180 bar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-title">Torque Values</div>
+        <div class="pressure-grid" style="grid-template-columns:repeat(2,minmax(140px,150px));justify-content:center;">
+          <div class="pressure-card">
+            <div class="pressure-title">Estimated Torque</div>
+            <div id="torqueNm" class="pressure-number">0</div>
+            <div class="pressure-unit">Nm</div>
+          </div>
+          <div class="pressure-card">
+            <div class="pressure-title">Estimated Torque</div>
+            <div id="torqueFtLb" class="pressure-number">0</div>
+            <div class="pressure-unit">ft-lb</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-title">Rock Drill</div>
+        <div class="rock-row">
+          <div class="rock-button" data-torque-drill="RD314/RD315">RD314 / RD315</div>
+          <div class="rock-button active" data-torque-drill="RD525">RD525</div>
+          <div class="rock-button" data-torque-drill="RDX5">RDX5</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-title">Rotation Motor</div>
+        <div class="rock-row">
+          <div class="rock-button" data-torque-motor="OMS80">OMS80</div>
+          <div class="rock-button" data-torque-motor="OMS100">OMS100</div>
+          <div class="rock-button active" data-torque-motor="OMS125">OMS125</div>
+          <div class="rock-button" data-torque-motor="OMS160">OMS160</div>
+        </div>
+        <div style="margin-top:14px;font-size:12px;color:#cbd5e1;line-height:1.4;text-align:center;">
+          Estimated hydraulic rotation output. Not a calibrated tightening torque. Actual nut torque depends on hydraulic losses, threads, lubrication, washer and joint friction.
+        </div>
+      </div>
+    </div>
+  `;
+
+  const pressureSlider = container.querySelector("#torquePressureSlider");
+  const pressureDisplay = container.querySelector("#torquePressureDisplay");
+  const torqueNm = container.querySelector("#torqueNm");
+  const torqueFtLb = container.querySelector("#torqueFtLb");
+  const drillButtons = [...container.querySelectorAll("[data-torque-drill]")];
+  const motorButtons = [...container.querySelectorAll("[data-torque-motor]")];
+
+  function availableMotors(){
+    return Object.keys(torqueData[selectedDrill]);
+  }
+
+  function refreshMotorAvailability(){
+    const available = availableMotors();
+
+    if(!available.includes(selectedMotor)){
+      selectedMotor = available[0];
+    }
+
+    motorButtons.forEach(button => {
+      const motor = button.dataset.torqueMotor;
+      const isAvailable = available.includes(motor);
+      button.classList.toggle("disabled", !isAvailable);
+      button.classList.toggle("active", isAvailable && motor === selectedMotor);
+      button.setAttribute("aria-disabled", String(!isAvailable));
+      button.tabIndex = isAvailable ? 0 : -1;
+    });
+  }
+
+  function updateTorque(){
+    pressureDisplay.textContent = `${pressureBar} bar`;
+    const referenceTorqueNm = torqueData[selectedDrill][selectedMotor];
+    const calculatedNm = Math.round(referenceTorqueNm * pressureBar / REFERENCE_PRESSURE_BAR);
+    const calculatedFtLb = Math.round(calculatedNm * FT_LB_PER_NM);
+    torqueNm.textContent = calculatedNm;
+    torqueFtLb.textContent = calculatedFtLb;
+  }
+
+  pressureSlider.addEventListener("input", event => {
+    pressureBar = Number(event.target.value);
+    updateTorque();
+  });
+
+  drillButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      selectedDrill = button.dataset.torqueDrill;
+      drillButtons.forEach(item => item.classList.toggle("active", item.dataset.torqueDrill === selectedDrill));
+      refreshMotorAvailability();
+      updateTorque();
+    });
+  });
+
+  motorButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const motor = button.dataset.torqueMotor;
+      if(!(motor in torqueData[selectedDrill])) return;
+      selectedMotor = motor;
+      refreshMotorAvailability();
+      updateTorque();
+    });
+  });
+
+  refreshMotorAvailability();
+  updateTorque();
+}
+
 function toggleQR() {
   const popup = document.getElementById("qr-popup");
   if (!popup) return;
