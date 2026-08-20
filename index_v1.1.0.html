@@ -1,0 +1,2072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<meta name="theme-color" content="#000000">
+<title>Sandvik Drilling Settings Tool</title>
+
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<style>
+:root{
+  --black:#000000;
+  --white:#f3f3f3;
+  --card-black:#050505;
+  --sandvik:#ff8200;
+  --panel:#0f1722;
+  --panel2:#1a2430;
+  --text:#e5e7eb;
+  --muted:#aeb7c2;
+  --ring:rgba(255,130,0,.18);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+
+html{
+  background:#000000;
+}
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  background:var(--black);
+  color:var(--text);
+}
+
+#app{
+  min-height:100vh;
+}
+
+.app-layout{
+  min-height:auto;
+  background:var(--black);
+}
+
+.hero{
+  background:var(--black);
+  color:#fff;
+  padding:24px 20px 18px;
+}
+
+.hero-inner{
+  width:100%;
+  max-width:1180px;
+  margin:0 auto;
+}
+
+.brand{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+
+.logo{
+  width:360px;
+  max-width:90%;
+  filter:brightness(0) invert(1);
+}
+
+.subtitle{
+  font-size:1.05rem;
+  color:#ffffff;
+  letter-spacing:.2px;
+}
+
+.title-row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  margin-top:22px;
+}
+
+.title-col{
+  min-width:0;
+}
+
+.back{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  color:#f3f4f6;
+  font-weight:800;
+  font-size:1.15rem;
+  margin-bottom:14px;
+  text-decoration:none;
+}
+
+.back:hover{opacity:.92}
+
+.page-title{
+  margin:0;
+  font-size:2.0rem;
+  line-height:1.05;
+  color:#fff;
+}
+
+.title-spacer{
+  width:1px;
+  min-height:1px;
+}
+
+.content-panel{
+  background:var(--white);
+  color:#111827;
+  padding:34px 20px 42px;
+}
+
+.content-inner{
+  width:100%;
+  max-width:1180px;
+  margin:0 auto;
+}
+
+.content-inner.narrow{
+  max-width:1000px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(220px, 220px));
+  gap:28px;
+  justify-content:center;
+  align-items:start;
+}
+
+.card{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+
+  width:220px;
+  min-height:160px;
+
+  background:var(--card-black);
+  border:1px solid var(--sandvik);
+  border-radius:30px;
+  padding:2rem;
+  cursor:pointer;
+  text-align:center;
+  color:#ffffff;
+  box-shadow:0 18px 40px rgba(0,0,0,.22);
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card small{
+  display:block;
+  margin-top:.5rem;
+  color:#d0d6de;
+  font-weight:500;
+  font-size:0.75rem;
+}
+
+.card:hover{
+  transform:translateY(-3px);
+  background:#111;
+  box-shadow:0 16px 34px rgba(0,0,0,.26);
+}
+
+.card:active{
+  transform:scale(0.97);
+  background:#111;
+  box-shadow:0 10px 22px rgba(0,0,0,.25);
+}
+
+.bit-band{
+  background:var(--black);
+  padding:22px 20px 34px;
+  position:relative;
+}
+
+.bit-band-inner{
+  width:100%;
+  max-width:1180px;
+  margin:0 auto;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:180px;
+}
+
+.bit-image{
+  display:block;
+  width:min(760px, 88vw);
+  max-width:100%;
+  height:auto;
+  pointer-events:none;
+  user-select:none;
+  filter: drop-shadow(0 0 25px rgba(255,130,0,0.66));
+}
+
+
+.app-shell{
+  background:#000000;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:28px;
+  padding:1.8rem;
+  box-shadow:0 18px 40px rgba(0,0,0,.22);
+  color:var(--text);
+}
+
+.block{margin-bottom:1.8rem}
+.block:last-child{margin-bottom:0}
+
+.block-title{
+  font-size:1rem;
+  color:#d1d5db;
+  margin-bottom:.75rem;
+  letter-spacing:.3px;
+  font-weight:700;
+}
+
+.tool-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:12px;
+}
+
+.drill-name{
+  margin:0;
+  font-size:1.55rem;
+  font-weight:900;
+  color:#fff;
+}
+
+.power-wrap{
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)), var(--panel2);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:22px;
+  padding:.8rem 1rem .7rem;
+}
+
+.power-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:6px;
+}
+
+.power-value{
+  font-size:1.35rem;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:.5px;
+  color:#ffffff;
+}
+
+input[type=range]{
+  -webkit-appearance:none;
+  width:100%;
+  height:8px;
+  border-radius:6px;
+  outline:none;
+  background:linear-gradient(to right,#22c55e 0%,#22c55e 50%,#eab308 65%,#ef4444 100%);
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:#ffffff;
+  border:2px solid #0f172a;
+  cursor:pointer;
+  margin-top:-6px;
+}
+input[type=range]::-moz-range-thumb{
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:#ffffff;
+  border:2px solid #0f172a;
+  cursor:pointer;
+}
+
+.power-scale{
+  display:flex;
+  justify-content:space-between;
+  margin-top:.5rem;
+  font-size:.9rem;
+  color:#cbd5e1;
+  gap:18px;
+}
+
+
+.direction-wrap{
+  margin-top:14px;
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)), var(--panel2);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:22px;
+  padding:.8rem 1rem .7rem;
+  transition:opacity .2s ease, filter .2s ease;
+}
+
+.direction-wrap.direction-dimmed{
+  opacity:.42;
+  filter:blur(1.1px) saturate(.8);
+}
+
+.direction-header{
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
+  margin-bottom:6px;
+}
+
+.direction-slider{
+  -webkit-appearance:none;
+  appearance:none;
+  width:100%;
+  height:8px;
+  border-radius:6px;
+  outline:none;
+  cursor:pointer;
+  touch-action:none;
+  background:linear-gradient(to right,#22c55e 0%,#16a34a 35%,#0ea5e9 70%,#2563eb 100%) !important;
+}
+
+.direction-slider::-webkit-slider-runnable-track{
+  width:100%;
+  height:8px;
+  border-radius:6px;
+  background:linear-gradient(to right,#22c55e 0%,#16a34a 35%,#0ea5e9 70%,#2563eb 100%);
+}
+
+.direction-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  appearance:none;
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:#ffffff;
+  border:2px solid #0f172a;
+  cursor:grab;
+  margin-top:-8px;
+}
+
+.direction-slider:active::-webkit-slider-thumb{
+  cursor:grabbing;
+}
+
+.direction-slider::-moz-range-track{
+  width:100%;
+  height:8px;
+  border-radius:6px;
+  background:linear-gradient(to right,#22c55e 0%,#16a34a 35%,#0ea5e9 70%,#2563eb 100%);
+}
+
+.direction-slider::-moz-range-thumb{
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:#ffffff;
+  border:2px solid #0f172a;
+  cursor:grab;
+}
+
+
+.direction-slider:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.direction-slider:disabled::-webkit-slider-thumb{
+  cursor:not-allowed;
+}
+
+.direction-slider:disabled::-moz-range-thumb{
+  cursor:not-allowed;
+}
+
+.direction-scale{
+  display:flex;
+  justify-content:space-between;
+  margin-top:.5rem;
+  font-size:.9rem;
+  color:#cbd5e1;
+  gap:18px;
+}
+
+.pressure-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+  gap:20px;
+  justify-items:center;
+  margin-top:.6rem;
+}
+
+.pressure-card{
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:.75rem;
+
+  /* 🔷 UUSI SININEN + SYVYYS */
+  background:
+    radial-gradient(circle at 30% 25%, #1e4ed8 0%, #0b1f4d 70%);
+
+  color:#ffffff;
+
+  /* ⚡ SÄHKÖINEN HEHKU + SYVYYS */
+  box-shadow:
+    0 14px 28px rgba(0,0,0,.32),
+    inset 0 2px 12px rgba(255,255,255,.08),
+    0 0 18px rgba(30,78,216,0.35);
+
+  flex:0 0 auto;
+  transition:opacity .2s ease, filter .2s ease, transform .2s ease;
+
+  position:relative;
+  overflow:hidden;
+}
+
+/* ✨ LASIMAINEN HEIJASTUS */
+.pressure-card::before{
+  content:"";
+  position:absolute;
+  top:8%;
+  left:15%;
+  width:70%;
+  height:40%;
+  background:linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.25),
+    rgba(255,255,255,0.05),
+    transparent
+  );
+  border-radius:50%;
+  filter:blur(6px);
+  pointer-events:none;
+}
+
+.pressure-title{
+  font-size:.82rem;
+  font-weight:800;
+  line-height:1.12;
+  max-width:110px;
+  margin-bottom:.35rem;
+}
+
+.pressure-number{
+  font-size:2.05rem;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.5px
+}
+
+.pressure-unit{
+  font-size:.82rem;
+  font-weight:800;
+  margin-top:.25rem;
+  opacity:.92
+}
+
+.dimmed{
+  opacity:.42;
+  filter:blur(1.1px) saturate(.8)
+}
+
+.bit-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:.8rem;
+}
+.bit-button,
+.mode-button{
+  padding:1rem .6rem;
+  border-radius:14px;
+  background:#1e293b;
+  text-align:center;
+  cursor:pointer;
+  font-weight:700;
+  font-size:1.05rem;
+  letter-spacing:.2px;
+  transition:.2s ease;
+  border:1px solid transparent;
+  user-select:none;
+  box-shadow:0 8px 18px rgba(0,0,0,.22);
+  color:#f8fafc;
+}
+
+.bit-button:hover,
+.mode-button:hover{
+  background:#334155;
+  transform:translateY(-2px);
+}
+
+.bit-button.active,
+.mode-button.active{
+  background:linear-gradient(135deg,#ffb259,#ff8200);
+  color:#111827;
+  border-color:rgba(255,255,255,.25);
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 10px 22px rgba(255,130,0,.18), 0 0 0 4px var(--ring);
+}
+
+.rock-row{
+  display:flex;
+  justify-content:center;
+  gap:1rem;
+  flex-wrap:wrap;
+  margin-top:1rem;
+}
+
+.rock-button{
+  min-width:110px;
+  padding:0.6rem 0.8rem;
+  border-radius:12px;
+  font-size:0.9rem;
+  background:#1e293b;
+  text-align:center;
+  cursor:pointer;
+  font-weight:800;
+  letter-spacing:.2px;
+  transition:.2s ease;
+  border:1px solid transparent;
+  user-select:none;
+  box-shadow:0 8px 18px rgba(0,0,0,.22);
+  color:#f8fafc;
+}
+
+.rock-button small{
+  display:block;
+  margin-top:.25rem;
+  font-size:.78rem;
+  font-weight:700;
+  color:#cbd5e1;
+}
+
+@media (hover:hover) and (pointer:fine){
+  .rock-button:hover{
+    background:#334155;
+    transform:translateY(-2px);
+  }
+}
+
+.rock-button.active{
+  background:linear-gradient(135deg,#ffb259,#ff8200);
+  color:#111827;
+  border-color:rgba(255,255,255,.25);
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 10px 22px rgba(255,130,0,.18), 0 0 0 4px var(--ring);
+}
+
+.rock-button.active small{
+  color:#111827;
+}
+
+.rock-button.disabled{
+  opacity:.32;
+  filter:blur(1.1px) grayscale(100%) saturate(.7);
+  cursor:not-allowed;
+  pointer-events:none;
+  box-shadow:none;
+  transform:none;
+}
+
+.mode-row{
+  display:flex;
+  justify-content:center;
+  gap:1rem;
+  flex-wrap:wrap;
+  margin-top:1rem;
+}
+
+.mode-button{
+  min-width:240px;
+  padding:1rem 1.2rem;
+  font-weight:800;
+  font-size:1rem;
+}
+
+.placeholder{
+  margin-top:1rem;
+  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)), var(--panel2);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:20px;
+  padding:1.2rem;
+  text-align:center;
+  color:#d1d5db;
+}
+
+footer{
+  text-align:center;
+  opacity:.6;
+  font-size:.78rem;
+  padding:1rem 0 2rem;
+  background:#000;
+  color:#fff;
+}
+
+@media (max-width:1000px){
+  .grid{
+    grid-template-columns:repeat(2, minmax(220px, 1fr));
+    justify-items:center;
+  }
+  .card{margin-left:auto;margin-right:auto}
+}
+
+.qr-corner {
+  position:absolute;
+  bottom:-25px;
+  right:20px;
+  display:none;
+  z-index:5;
+}
+
+.qr-corner img {
+  width:55px;
+  height:55px;
+  display:block;
+}
+
+#qr-popup {
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+#qr-popup img {
+  width:250px;
+  height:250px;
+  background:white;
+  padding:10px;
+  border-radius:10px;
+}
+
+@media (max-width:700px){
+  .hero{
+    padding:16px 14px 14px;
+  }
+
+  .brand{
+    gap:8px;
+  }
+
+  .logo{
+    width:230px;
+  }
+
+  .subtitle{
+    font-size:1rem;
+    text-align:center;
+  }
+
+  .title-row{
+    margin-top:16px;
+    display:block;
+  }
+
+  .back{
+    font-size:1rem;
+    margin-bottom:12px;
+  }
+
+  .page-title{
+    font-size:2.3rem;
+    line-height:1.08;
+    word-break:break-word;
+  }
+
+  .content-panel{
+    padding:22px 12px 28px;
+  }
+
+  .content-inner,
+  .content-inner.narrow{
+    max-width:none;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+    gap:18px;
+    justify-items:center;
+    width:100%;
+  }
+
+  .card{
+    width:100%;
+    max-width:340px;
+    min-height:128px;
+    border-radius:26px;
+  }
+
+  .bit-band{
+    padding:18px 12px 5px;
+  }
+
+  .bit-band-inner{
+    min-height:220px;
+  }
+
+  .bit-image{
+    width:min(92vw, 560px);
+  }
+
+  .app-shell{
+    padding:1rem;
+    border-radius:22px;
+  }
+
+  .tool-head{
+    display:block;
+  }
+
+  .drill-name{
+    font-size:1.25rem;
+    margin-bottom:8px;
+  }
+
+  .power-value{
+    font-size:1.6rem;
+  }
+
+  .power-scale{
+    font-size:.78rem;
+    gap:10px;
+  }
+
+  .pressure-grid{
+    grid-template-columns:repeat(2, minmax(120px, 1fr));
+    gap:14px;
+  }
+
+  .pressure-card{
+    width:128px;
+    height:128px;
+  }
+
+  .pressure-number{font-size:1.65rem}
+  .pressure-title,
+  .pressure-unit{font-size:.74rem}
+
+  .bit-grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:.65rem;
+  }
+
+  .bit-button,
+  .mode-button{
+    font-size:.95rem;
+  }
+
+  .rock-row{
+    gap:.7rem;
+  }
+
+  .rock-button{
+    width:100%;
+    min-width:0;
+  }
+
+  .mode-row{
+    gap:.7rem;
+  }
+
+  .mode-button{
+    width:100%;
+    min-width:0;
+  }
+}
+
+/* Landing page - Version 1.1.0 */
+.landing-page{
+  min-height:100vh;
+  overflow-x:hidden;
+  display:flex;
+  justify-content:center;
+  background:#000;
+  color:#fff;
+  padding:26px 18px 24px;
+}
+.landing-content{
+  width:min(94vw,760px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+.landing-title{
+  position:relative;
+  z-index:2;
+  margin:0 0 2px;
+  max-width:720px;
+  font-size:clamp(2rem,5.8vw,3.65rem);
+  line-height:1.04;
+  font-weight:900;
+  color:#fff;
+  text-shadow:0 3px 18px rgba(0,0,0,.95);
+}
+.landing-stage{
+  position:relative;
+  width:min(96vw,760px);
+  min-height:470px;
+  margin-top:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.landing-round-logo{
+  position:absolute;
+  z-index:0;
+  top:50%;
+  left:50%;
+  width:min(118vw,1120px);
+  max-width:none;
+  max-height:620px;
+  transform:translate(-50%,-50%);
+  object-fit:contain;
+  opacity:.18;
+  filter:drop-shadow(0 0 28px rgba(255,255,255,.12));
+  mix-blend-mode:screen;
+  pointer-events:none;
+  user-select:none;
+}
+.landing-text{
+  position:relative;
+  z-index:1;
+  margin:0 0 24px;
+  max-width:620px;
+  font-size:clamp(1rem,2.8vw,1.2rem);
+  line-height:1.45;
+  color:#f3f4f6;
+  text-shadow:0 2px 12px rgba(0,0,0,.98);
+}
+.landing-actions{
+  position:relative;
+  z-index:1;
+  width:min(100%,500px);
+  display:grid;
+  gap:22px;
+}
+.landing-btn{
+  width:100%;
+  min-height:76px;
+  padding:18px 24px;
+  border:1px solid rgba(255,191,102,.85);
+  border-radius:24px;
+  background:linear-gradient(180deg,#ffad42 0%,#ff9200 32%,#ef7600 100%);
+  color:#111;
+  font:inherit;
+  font-size:1.25rem;
+  font-weight:900;
+  letter-spacing:.5px;
+  cursor:pointer;
+  box-shadow:0 0 18px rgba(255,130,0,.72),0 0 42px rgba(255,130,0,.42),inset 0 1px 0 rgba(255,255,255,.38);
+  transition:transform .15s ease,box-shadow .15s ease,filter .15s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.landing-btn:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.05);
+  box-shadow:0 0 22px rgba(255,130,0,.88),0 0 52px rgba(255,130,0,.54),inset 0 1px 0 rgba(255,255,255,.42);
+}
+.landing-btn:active{transform:scale(.98)}
+.landing-bit{
+  position:relative;
+  z-index:2;
+  display:block;
+  width:min(92vw,760px);
+  max-width:100%;
+  height:auto;
+  margin:2px auto 0;
+  filter:drop-shadow(0 0 18px rgba(255,130,0,.72)) drop-shadow(0 0 36px rgba(255,130,0,.34));
+  pointer-events:none;
+  user-select:none;
+}
+.landing-version{
+  margin-top:16px;
+  text-align:center;
+  color:rgba(255,255,255,.62);
+  font-size:.9rem;
+  font-weight:700;
+}
+
+/* Release Notes */
+.release-notes{max-width:900px;margin:0 auto}
+.release-entry{background:#fff;border-left:6px solid var(--sandvik);border-radius:18px;padding:24px 26px;box-shadow:0 12px 30px rgba(0,0,0,.10)}
+.release-entry+.release-entry{margin-top:22px}
+.release-version{margin:0;color:#111827;font-size:1.45rem;font-weight:900}
+.release-date{margin-top:5px;color:#6b7280;font-size:.9rem;font-weight:700}
+.release-changes{margin:18px 0 0;padding-left:1.35rem;color:#1f2937;line-height:1.65}
+.release-changes li+li{margin-top:8px}
+
+@media(max-width:700px){
+  .landing-page{padding:20px 12px 22px}
+  .landing-title{font-size:clamp(2rem,10vw,3rem);margin-bottom:0}
+  .landing-stage{width:100%;min-height:410px}
+  .landing-round-logo{width:min(145vw,900px);max-height:540px;opacity:.16}
+  .landing-text{margin-bottom:20px}
+  .landing-actions{width:min(88vw,500px);gap:18px}
+  .landing-btn{min-height:68px;border-radius:20px;font-size:1.1rem}
+  .landing-bit{width:min(96vw,680px);margin-top:0}
+  .release-entry{padding:20px 18px;border-radius:16px}
+  .release-version{font-size:1.25rem}
+}
+
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<footer>
+  <span id="app-title">Sandvik Drilling Settings Tool – MVP</span>
+</footer>
+
+<script>
+const APP_VERSION = "1.1.0"; // muuta tätä jatkossa
+
+document.addEventListener("DOMContentLoaded", function() {
+  const title = document.getElementById("app-title");
+  if (title) {
+    title.innerHTML += "&nbsp;&nbsp;&nbsp;v." + APP_VERSION;
+  }
+});
+
+const app = document.getElementById("app");
+let currentCategory = null;
+let rigGeneration = "iseries";
+
+const categories = {
+  longhole: {
+    title: "Long Hole Drills",
+    items: ["RD1735", "RD927", "HL1560"]
+  },
+  face: {
+    title: "Development Drills",
+    items: ["RDX5", "RD525", "RD535"]
+  },
+  bolting: {
+    title: "Bolting Drills",
+    items: ["RD314", "RD414"]
+  },
+  instructions: {
+    title: "Instructions",
+    items: []
+  }
+};
+
+const RD1735Config = {
+  bits: [
+{ size: 89, index: 11 },
+    { size: 102, index: 12 },
+    { size: 115, index: 12 },
+    { size: 127, index: 12 },
+    { size: 156, index: 12 },
+    { size: 204, index: 12 }
+  ],
+  defaults: { selectedBit: 102, powerValue: 60, mode: "torque" },
+  feed: { label: "Feed Pressure", unit: "bar", min: 30, max: 100 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 200 },
+  rotation: { label: "Rotation Torque", unit: "bar", min: 35, max: 65 },
+  frequency: { min: 28, max: 39, refMin: 100, refMax: 200 }
+};
+
+const RD927Config = {
+  bits: [
+{ size: 89, index: 11 },
+    { size: 102, index: 12 },
+    { size: 115, index: 12 },
+    { size: 127, index: 12 },
+    { size: 156, index: 12 },
+    { size: 204, index: 12 }
+
+
+  ],
+  defaults: { selectedBit: 102, powerValue: 60, mode: "torque" },
+  feed: { label: "Feed Pressure", unit: "bar", min: 30, max: 100 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 200 },
+  rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
+  frequency: { min: 42, max: 59, refMin: 100, refMax: 200 }
+};
+
+const HL1560Config = {
+  bits: [
+   { size: 89, index: 11 },
+    { size: 102, index: 12 },
+    { size: 115, index: 12 },
+    { size: 127, index: 12 },
+    { size: 156, index: 12 },
+    { size: 204, index: 12 }
+
+
+  ],
+  defaults: { selectedBit: 89, powerValue: 60, mode: "torque" },
+  feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 200 },
+  rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
+  frequency: { min: 28, max: 38, refMin: 100, refMax: 200 }
+};
+
+const RDX5Config = {
+  bits: [
+    { size: 41, index: 7 },
+    { size: 43, index: 7 },
+    { size: 45, index: 7 },
+    { size: 48, index: 7 },
+    { size: 51, index: 7 },
+    { size: 64, index: 8 },
+    { size: 76, index: 8 },
+    { size: 89, index: 8 },
+    { size: 102, index: 9 },
+    { size: 127, index: 9 }
+  ],
+  defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
+  feed: { label: "Feed Pressure", unit: "bar", min: 45, max: 125 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 220 },
+  rotation: { label: "Rotation Torque", unit: "bar", min: 35, max: 60 },
+  frequency: { min: 46, max: 62, refMin: 100, refMax: 220 }
+};
+
+const RD525Config = {
+  bits: [
+    { size: 41, index: 7 },
+    { size: 43, index: 7 },
+    { size: 45, index: 7 },
+    { size: 48, index: 7 },
+    { size: 51, index: 7 },
+    { size: 64, index: 8 },
+    { size: 76, index: 8 },
+    { size: 89, index: 8 },
+    { size: 102, index: 9 },
+    { size: 127, index: 9 }
+  ],
+  defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
+  feed: { label: "Feed Pressure", unit: "bar", min: 50, max: 140 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 230 },
+  rotation: { label: "Rotation Torque", unit: "bar", min: 40, max: 65 },
+  frequency: { min: 62, max: 93, refMin: 100, refMax: 230 }
+};
+
+const RD535Config = {
+  bits: [
+    { size: 41, index: 7 },
+    { size: 43, index: 7 },
+    { size: 45, index: 7 },
+    { size: 48, index: 7 },
+    { size: 51, index: 7 },
+    { size: 64, index: 8 },
+    { size: 76, index: 8 },
+    { size: 89, index: 8 },
+    { size: 102, index: 9 },
+    { size: 127, index: 9 }
+  ],
+  defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
+  feed: { label: "Feed Pressure", unit: "bar", min:50, max: 145 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 225 },
+  rotation: { label: "Rotation Torque", unit: "bar", min: 40, max: 70 },
+  frequency: { min: 72, max: 107, refMin: 100, refMax: 225 }
+};
+
+const RD314Config = {
+  bits: [
+    { size: 33, index: 6 },
+    { size: 35, index: 6 },
+    { size: 37, index: 6 },
+    { size: 41, index: 7 }
+  ],
+  defaults: { selectedBit: 35, powerValue: 60, mode: "torque" },
+  feed: { label: "Feed Pressure", unit: "bar", min: 50, max: 110 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 180 },
+  rotation: { label: "Rotation Torque", unit: "bar", min: 45, max: 65 },
+  frequency: { min: 82, max: 110, refMin: 100, refMax: 180 }
+};
+
+const RD414Config = {
+  bits: [
+    { size: 51, index: 7 },
+    { size: 57, index: 7 },
+    { size: 60, index: 7 },
+    { size: 64, index: 8 },
+    { size: 70, index: 8 }
+  ],
+  defaults: { selectedBit: 51, powerValue: 60, mode: "torque" },
+  feed: { label: "Feed Pressure", unit: "bar", min: 40, max: 80 },
+  percussion: { label: "Percussion Pressure", unit: "bar", min: 100, max: 220 },
+  rotation: { label: "Rotation Torque", unit: "bar", min: 30, max: 60 },
+  frequency: { min: 52, max: 78, refMin: 100, refMax: 220 }
+};
+
+const drillConfigs = {
+  RD1735: RD1735Config,
+  RD927: RD927Config,
+  HL1560: HL1560Config,
+  RDX5: RDX5Config,
+  RD525: RD525Config,
+  RD535: RD535Config,
+  RD314: RD314Config,
+  RD414: RD414Config
+};
+
+
+const torqueData = {
+  "RD314/RD315": {
+    OMS100: 340,
+    OMS125: 420
+  },
+  RD525: {
+    OMS80: 400,
+    OMS125: 625,
+    OMS160: 700
+  },
+  RDX5: {
+    OMS80: 400,
+    OMS125: 625,
+    OMS160: 780
+  }
+};
+
+function renderPage({ title = "", backAction = "", contentHTML = "", showBit = false, bitSrc = "Bit.png", narrow = false }){
+  const backHTML = backAction
+    ? `<div class="back" onclick="${backAction}">← Back</div>`
+    : "";
+
+  const titleHTML = title
+    ? `
+      <div class="title-row">
+        <div class="title-col">
+          ${backHTML}
+          <h1 class="page-title">${title}</h1>
+        </div>
+        <div class="title-spacer"></div>
+      </div>
+    `
+    : "";
+
+  return `
+    <section class="app-layout">
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="brand">
+            <img
+              class="logo"
+              src="https://media.mktg.workday.com/is/image/workday/customer-logo-sandvik-medium-2?fmt=png-alpha"
+              alt="Sandvik logo"
+            />
+            <div class="subtitle">Drilling Settings Tool</div>
+          </div>
+          ${titleHTML}
+        </div>
+      </section>
+
+      <section class="content-panel">
+        <div class="content-inner ${narrow ? "narrow" : ""}">
+          ${contentHTML}
+        </div>
+      </section>
+
+      ${showBit ? `
+        <section class="bit-band">
+          <div class="bit-band-inner">
+            <img class="bit-image" src="${bitSrc}" alt="Drill bit" />
+          </div>
+
+          <div class="qr-corner" onclick="toggleQR()">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://samppu78.github.io/drillapp/" alt="QR code">
+          </div>
+
+          <div id="qr-popup" onclick="toggleQR()">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://samppu78.github.io/drillapp/" alt="QR code large">
+          </div>
+        </section>
+      ` : ""}
+    </section>
+  `;
+}
+
+function selectRigGeneration(generation){
+  rigGeneration = generation;
+  showHome();
+}
+function showLandingPage(){
+  app.innerHTML = `
+    <section class="landing-page">
+      <div class="landing-content">
+        <h1 class="landing-title">Welcome to Sandvik<br>Drilling Adjustment<br>Application</h1>
+        <div class="landing-stage">
+          <img class="landing-round-logo" src="icon-512.png" alt="" aria-hidden="true" />
+          <p class="landing-text">Select the drill rig generation you are going to adjust.</p>
+          <div class="landing-actions">
+            <button class="landing-btn" type="button" onclick="selectRigGeneration('iseries')">I-SERIES</button>
+            <button class="landing-btn" type="button" onclick="selectRigGeneration('old1series')">LEGACY 1-SERIES</button>
+          </div>
+        </div>
+        <img class="landing-bit" src="Bit.png" alt="Drill bit" />
+        <div class="landing-version">Version ${APP_VERSION}</div>
+      </div>
+    </section>
+  `;
+}
+function showHome(){
+  const content = `
+    <div class="grid">
+      <div class="card" onclick="openCategory('longhole')">
+        Long Hole Drills
+        <small>RD927, RD1735, HL1560</small>
+      </div>
+
+      <div class="card" onclick="openCategory('face')">
+        Development Drills
+        <small>RDX5, RD525, RD535</small>
+      </div>
+
+      <div class="card" onclick="openCategory('bolting')">
+        Bolting Drills
+        <small>RD314, RD414</small>
+      </div>
+
+      <div class="card" onclick="openTorqueCalculator()">
+        Bolt Nut Tightening Torque
+        <small>RD314, RD315, RD525, RDX5</small>
+      </div>
+
+      <div class="card" onclick="openCategory('instructions')">
+        Instructions &amp; Guides
+      </div>
+    </div>
+  `;
+
+  app.innerHTML = renderPage({
+    title: "Drill Rig Selection",
+    backAction: "showLandingPage()",
+    contentHTML: content,
+    showBit: true,
+    bitSrc: "Bit.png"
+  });
+}
+
+function openCategory(key){
+  const category = categories[key];
+  currentCategory = key;
+
+  const content = `
+    <div class="grid" id="categoryGrid"></div>
+  `;
+
+  app.innerHTML = renderPage({
+    title: category.title,
+    backAction: "showHome()",
+    contentHTML: content,
+    showBit: true,
+    bitSrc: "Bit.png"
+  });
+
+  const qr = document.querySelector('.qr-corner');
+  if (qr) {
+    qr.style.display = key === "instructions" ? "block" : "none";
+  }
+
+  const grid = document.getElementById("categoryGrid");
+
+  if(key === "instructions"){
+    grid.innerHTML = `
+      <div class="card" onclick="window.open('Drilling App Guide.pdf')">
+        Drilling App Guide
+        <small>PDF file</small>
+      </div>
+
+      <div class="card" onclick="window.open('iSeries Adjustment Guide.pdf')">
+        Drilling Guide iSeries
+        <small>PDF file</small>
+      </div>
+
+      <div class="card" onclick="window.open('Top Hammer Catalog.pdf')">
+        Top Hammer Catalog
+        <small>PDF file</small>
+      </div>
+
+      <div class="card" onclick="window.open('Failure Analysis Guide.pdf')">
+        Rock Tools Failure Analysis Guide
+        <small>PDF file</small>
+      </div>
+      <div class="card" onclick="openReleaseNotes()">
+        Release Notes
+      </div>
+    `;
+    return;
+  }
+
+  category.items.forEach(item => {
+    const btn = document.createElement("div");
+    btn.className = "card";
+    btn.textContent = item;
+    btn.onclick = () => openDrill(item);
+    grid.appendChild(btn);
+  });
+}
+
+function openReleaseNotes(){
+  const content = `
+    <div class="release-notes">
+      <article class="release-entry">
+        <h2 class="release-version">Version 1.1.0</h2>
+        <div class="release-date">20 August 2026</div>
+        <ul class="release-changes">
+          <li>Added a new Sandvik-style landing page with I-Series and Legacy 1-Series selection.</li>
+          <li>I-Series retains the existing drilling adjustment calculations.</li>
+          <li>Legacy 1-Series rotation target and rotation pressure values are 20 bar higher for all rock drills.</li>
+          <li>Added navigation back to the rig generation selection page.</li>
+          <li>Moved the application version display to the landing page.</li>
+          <li>Added a Release Notes page to Instructions &amp; Guides.</li>
+          <li>Improved the landing page layout for mobile use and separated the title and Bit.png image from the background logo.</li>
+        </ul>
+      </article>
+    </div>
+  `;
+  app.innerHTML = renderPage({
+    title: "Release Notes",
+    backAction: "openCategory('instructions')",
+    contentHTML: content,
+    narrow: true,
+    showBit: false
+  });
+}
+function openDrill(name){
+  const content = `
+    <div id="drillContainer"></div>
+  `;
+
+  app.innerHTML = renderPage({
+    title: name,
+    backAction: `openCategory('${currentCategory}')`,
+    contentHTML: content,
+    narrow: true,
+    showBit: false
+  });
+
+  const container = document.getElementById("drillContainer");
+  const config = drillConfigs[name];
+
+  if(config){
+    renderDrillTool(container, config, name);
+  } else {
+    container.innerHTML = `
+      <div class="placeholder">
+        ${name} is coming later.
+      </div>
+    `;
+  }
+}
+
+function interpolate(min, max, percent){
+  return Math.round(min + (max - min) * (percent / 100));
+}
+
+function calculateFrequency(percussionBar, config){
+  return config.frequency.min +
+    (percussionBar - config.frequency.refMin) *
+    (config.frequency.max - config.frequency.min) /
+    (config.frequency.refMax - config.frequency.refMin);
+}
+
+function calculateRPM(freq, selectedBit){
+  return Math.round((60 * freq * selectedBit.index) / (Math.PI * selectedBit.size));
+}
+
+function renderDrillTool(container, config, drillName){
+  let selectedBit = config.bits.find(b => b.size === config.defaults.selectedBit);
+  let powerValue = config.defaults.powerValue;
+  let mode = config.defaults.mode;
+  let directionAngle = 0;
+
+  let reamingActive = false;
+  const isDL = ["RD1735", "RD927", "HL1560"].includes(drillName);
+  const supportsReaming = !["RD314", "RD414"].includes(drillName);
+
+  const rockPresets = {
+    soft: 40,
+    medium: 65,
+    hard: 90
+  };
+
+  container.innerHTML = `
+    <div class="app-shell">
+      <div class="block">
+        <div class="tool-head">
+          <div class="block-title">Drilling Settings</div>
+        </div>
+
+        <div class="rock-row">
+          <div id="btnSoft" class="rock-button">Soft</div>
+          <div id="btnMedium" class="rock-button">Medium</div>
+          <div id="btnHard" class="rock-button">Hard</div>
+          ${supportsReaming ? `<div id="btnReaming" class="rock-button">Reaming</div>` : ""}
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="tool-head">
+          <div class="block-title">Drilling Power</div>
+        </div>
+
+        <div class="power-wrap">
+          <div class="power-header">
+            <div id="powerDisplay" class="power-value">${powerValue}%</div>
+          </div>
+
+          <input id="powerSlider" type="range" min="0" max="100" value="${powerValue}">
+
+          <div class="power-scale">
+            <span>0% / Min</span>
+            <span>Max / 100%</span>
+          </div>
+        </div>
+
+
+        ${isDL ? `
+          <div class="tool-head" style="margin-top:14px;">
+            <div class="block-title">Drilling Angle</div>
+          </div>
+
+          <div id="directionWrap" class="direction-wrap" style="margin-top:0;">
+            <div class="direction-header">
+              <div id="directionDisplay" class="power-value">0°</div>
+            </div>
+
+            <input
+              id="directionSlider"
+              class="direction-slider"
+              type="range"
+              min="0"
+              max="180"
+              step="1"
+              value="0"
+            >
+
+            <div class="direction-scale">
+              <span>0° / Up</span>
+              <span>Down / 180°</span>
+            </div>
+          </div>
+        ` : ""}
+      </div>
+
+      <div class="block">
+        <div class="block-title">Pressure Values</div>
+
+        <div class="pressure-grid" style="width:100%;">
+          <div id="rotationCard" class="pressure-card">
+            <div id="rotationTitle" class="pressure-title"></div>
+            <div id="rotationValue" class="pressure-number">0</div>
+            <div class="pressure-unit">${config.rotation.unit}</div>
+          </div>
+
+          <div id="rpmCard" class="pressure-card">
+            <div class="pressure-title">Rotation Speed</div>
+            <div id="rpmValue" class="pressure-number">0</div>
+            <div class="pressure-unit">rpm</div>
+          </div>
+
+          <div id="percussionCard" class="pressure-card">
+            <div class="pressure-title">${config.percussion.label}</div>
+            <div id="percussionValue" class="pressure-number">0</div>
+            <div class="pressure-unit">${config.percussion.unit}</div>
+          </div>
+
+          <div id="feedCard" class="pressure-card">
+            <div class="pressure-title">${config.feed.label}</div>
+            <div id="feedValue" class="pressure-number">0</div>
+            <div class="pressure-unit">${config.feed.unit}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-title">Drill Bit Diameter</div>
+        <div id="bitOptions" class="bit-grid"></div>
+
+       <div class="mode-row">
+  <div id="btnTorque" class="mode-button ${mode === "torque" ? "active" : ""}">
+    Torque Control
+  </div>
+  <div id="btnFollow" class="mode-button ${mode === "follow" ? "active" : ""}">
+    Feed Percussion Follow Up
+  </div>
+</div>
+
+<div class="mode-row">
+  <div id="btnMaxRotationSpeed" class="mode-button">
+    Max. Rotation Speed / OMS Rotation Motors
+  </div>
+</div>
+
+</div>
+</div>
+`;
+
+  const powerSlider = container.querySelector("#powerSlider");
+  const powerDisplay = container.querySelector("#powerDisplay");
+  const directionWrap = container.querySelector("#directionWrap");
+  const directionSlider = container.querySelector("#directionSlider");
+  const directionDisplay = container.querySelector("#directionDisplay");
+  const rotationTitle = container.querySelector("#rotationTitle");
+  const rotationValue = container.querySelector("#rotationValue");
+  const percussionValue = container.querySelector("#percussionValue");
+  const feedValue = container.querySelector("#feedValue");
+  const rpmValue = container.querySelector("#rpmValue");
+  const bitOptions = container.querySelector("#bitOptions");
+  const rotationCard = container.querySelector("#rotationCard");
+  const feedCard = container.querySelector("#feedCard");
+  const btnTorque = container.querySelector("#btnTorque");
+  const btnFollow = container.querySelector("#btnFollow");
+  const btnMaxRotationSpeed = container.querySelector("#btnMaxRotationSpeed");
+
+  const btnSoft = container.querySelector("#btnSoft");
+  const btnMedium = container.querySelector("#btnMedium");
+  const btnHard = container.querySelector("#btnHard");
+  const btnReaming = container.querySelector("#btnReaming");
+
+  const normalRockButtons = [btnSoft, btnMedium, btnHard];
+  const allPresetButtons = [btnSoft, btnMedium, btnHard, btnReaming].filter(Boolean);
+
+  function clearAllPresetSelections(){
+    allPresetButtons.forEach(btn => btn.classList.remove("active"));
+    reamingActive = false;
+  }
+
+  function clearNormalRockSelections(){
+    normalRockButtons.forEach(btn => btn.classList.remove("active"));
+  }
+
+  function resetBitToDefault(){
+    const defaultBit = config.bits.find(
+      b => b.size === config.defaults.selectedBit
+    );
+
+    if (defaultBit) {
+      selectedBit = defaultBit;
+      refreshBitButtons();
+    }
+  }
+
+  function refreshBitButtons(){
+    bitOptions.querySelectorAll(".bit-button").forEach(btn => {
+      btn.classList.remove("active");
+
+      if (btn.textContent === `${selectedBit.size} mm`) {
+        btn.classList.add("active");
+      }
+    });
+  }
+
+  function setRockCondition(condition, activeButton){
+    const wasAlreadyActive = activeButton.classList.contains("active");
+
+    clearAllPresetSelections();
+
+    if (wasAlreadyActive) {
+      resetBitToDefault();
+      update();
+      return;
+    }
+
+    activeButton.classList.add("active");
+
+    powerValue = rockPresets[condition];
+    powerSlider.value = powerValue;
+
+    resetBitToDefault();
+
+    update();
+  }
+
+  btnSoft.onclick = () => {
+    setRockCondition("soft", btnSoft);
+  };
+
+  btnMedium.onclick = () => {
+    setRockCondition("medium", btnMedium);
+  };
+
+  btnHard.onclick = () => {
+    setRockCondition("hard", btnHard);
+  };
+
+  if (btnReaming) {
+    btnReaming.onclick = () => {
+      const wasAlreadyActive = btnReaming.classList.contains("active");
+
+      clearAllPresetSelections();
+
+      if (wasAlreadyActive) {
+        resetBitToDefault();
+        update();
+        return;
+      }
+
+      btnReaming.classList.add("active");
+      reamingActive = true;
+
+      powerValue = 50;
+      powerSlider.value = powerValue;
+
+      let reamingBitSize = null;
+
+      if (["RD525", "RD535", "RDX5"].includes(drillName)) {
+        reamingBitSize = 102;
+      }
+
+      if (["RD1735", "RD927", "HL1560"].includes(drillName)) {
+        reamingBitSize = 156;
+      }
+
+      if (reamingBitSize !== null) {
+        const foundBit = config.bits.find(b => b.size === reamingBitSize);
+
+        if (foundBit) {
+          selectedBit = foundBit;
+          refreshBitButtons();
+        }
+      }
+
+      update();
+    };
+  }
+
+  function updateRotationTitle(){
+    rotationTitle.textContent = mode === "torque" ? "Rotation Target" : "Rotation Pressure";
+  }
+
+  config.bits.forEach(bit => {
+    const btn = document.createElement("div");
+    btn.className = "bit-button";
+    btn.textContent = bit.size + " mm";
+
+    if(bit === selectedBit){
+      btn.classList.add("active");
+    }
+
+    btn.onclick = () => {
+      selectedBit = bit;
+      bitOptions.querySelectorAll(".bit-button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      update();
+    };
+
+    bitOptions.appendChild(btn);
+  });
+
+  btnTorque.onclick = () => {
+    mode = "torque";
+    btnTorque.classList.add("active");
+    btnFollow.classList.remove("active");
+    updateMode();
+  };
+
+  btnFollow.onclick = () => {
+    mode = "follow";
+    btnFollow.classList.add("active");
+    btnTorque.classList.remove("active");
+    updateMode();
+  };
+
+btnMaxRotationSpeed.onclick = () => {
+  openMaxRotationPopup(drillName);
+};
+
+  powerSlider.addEventListener("input", e => {
+    powerValue = Number(e.target.value);
+
+    if (!reamingActive) {
+      clearNormalRockSelections();
+    }
+
+    update();
+  });
+
+
+  if (directionSlider) {
+    directionSlider.addEventListener("input", e => {
+      directionAngle = Number(e.target.value);
+      update();
+    });
+  }
+
+  function update(){
+    powerDisplay.textContent = `${powerValue}%`;
+
+    if (directionDisplay) {
+      directionDisplay.textContent = `${directionAngle}°`;
+    }
+
+    let rotationBar = interpolate(config.rotation.min, config.rotation.max, powerValue);
+
+    if (reamingActive) {
+      rotationBar = Math.round(rotationBar * 1.10);
+    }
+    if (rigGeneration === "old1series") {
+      rotationBar += 20;
+    }
+
+    const percussionBar = interpolate(config.percussion.min, config.percussion.max, powerValue);
+    const powerFeed = interpolate(config.feed.min, config.feed.max, powerValue);
+
+    let feedBar = powerFeed;
+
+    if (isDL) {
+      const minimumDownFeed = config.feed.min + 5;
+      feedBar = Math.round(
+        powerFeed + (minimumDownFeed - powerFeed) * (directionAngle / 180)
+      );
+    }
+
+    rotationValue.textContent = rotationBar;
+    percussionValue.textContent = percussionBar;
+    feedValue.textContent = feedBar;
+
+    const freq = calculateFrequency(percussionBar, config);
+    const rpm = calculateRPM(freq, selectedBit);
+    rpmValue.textContent = rpm;
+  }
+
+  function updateMode(){
+    rotationCard.classList.remove("dimmed");
+    feedCard.classList.remove("dimmed");
+
+    if(mode === "torque"){
+      feedCard.classList.add("dimmed");
+    }
+
+    if(mode === "follow"){
+      rotationCard.classList.add("dimmed");
+    }
+
+    if (directionWrap) {
+      const torqueMode = mode === "torque";
+
+      directionWrap.classList.toggle("direction-dimmed", torqueMode);
+
+      if (directionSlider) {
+        if (torqueMode) {
+          directionAngle = 0;
+          directionSlider.value = 0;
+          directionSlider.disabled = true;
+        } else {
+          directionSlider.disabled = false;
+        }
+      }
+    }
+
+    updateRotationTitle();
+    update();
+  }
+
+  updateRotationTitle();
+  update();
+  updateMode();
+}
+function openTorqueCalculator(){
+  const content = `
+    <div id="torqueCalculatorContainer"></div>
+  `;
+
+  app.innerHTML = renderPage({
+    title: "Nut Tightening Calculator",
+    backAction: "showHome()",
+    contentHTML: content,
+    narrow: true,
+    showBit: false
+  });
+
+  renderTorqueCalculator(document.getElementById("torqueCalculatorContainer"));
+}
+
+function renderTorqueCalculator(container){
+  const REFERENCE_PRESSURE_BAR = 175;
+  const FT_LB_PER_NM = 0.737562149;
+
+  let pressureBar = 100;
+  let selectedDrill = "RD525";
+  let selectedMotor = "OMS125";
+
+  container.innerHTML = `
+    <div class="app-shell">
+      <div class="block">
+        <div class="block-title">Rotation Pressure</div>
+        <div class="power-wrap">
+          <div class="power-header">
+            <div id="torquePressureDisplay" class="power-value">${pressureBar} bar</div>
+          </div>
+          <input id="torquePressureSlider" type="range" min="0" max="180" step="1" value="${pressureBar}" aria-label="Rotation pressure">
+          <div class="power-scale">
+            <span>0 bar / Min</span>
+            <span>Max / 180 bar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-title">Torque Values</div>
+        <div class="pressure-grid" style="grid-template-columns:repeat(2,minmax(140px,150px));justify-content:center;">
+          <div class="pressure-card">
+            <div class="pressure-title">Estimated Torque</div>
+            <div id="torqueNm" class="pressure-number">0</div>
+            <div class="pressure-unit">Nm</div>
+          </div>
+          <div class="pressure-card">
+            <div class="pressure-title">Estimated Torque</div>
+            <div id="torqueFtLb" class="pressure-number">0</div>
+            <div class="pressure-unit">ft-lb</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-title">Rock Drill</div>
+        <div class="rock-row">
+          <div class="rock-button" data-torque-drill="RD314/RD315">RD314 / RD315</div>
+          <div class="rock-button active" data-torque-drill="RD525">RD525</div>
+          <div class="rock-button" data-torque-drill="RDX5">RDX5</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-title">Rotation Motor</div>
+        <div class="rock-row">
+          <div class="rock-button" data-torque-motor="OMS80">OMS80</div>
+          <div class="rock-button" data-torque-motor="OMS100">OMS100</div>
+          <div class="rock-button active" data-torque-motor="OMS125">OMS125</div>
+          <div class="rock-button" data-torque-motor="OMS160">OMS160</div>
+        </div>
+        <div style="margin-top:14px;font-size:12px;color:#cbd5e1;line-height:1.4;text-align:center;">
+          Estimated hydraulic rotation output. Not a calibrated tightening torque. Actual nut torque depends on hydraulic losses, threads, lubrication, washer and joint friction.
+        </div>
+      </div>
+    </div>
+  `;
+
+  const pressureSlider = container.querySelector("#torquePressureSlider");
+  const pressureDisplay = container.querySelector("#torquePressureDisplay");
+  const torqueNm = container.querySelector("#torqueNm");
+  const torqueFtLb = container.querySelector("#torqueFtLb");
+  const drillButtons = [...container.querySelectorAll("[data-torque-drill]")];
+  const motorButtons = [...container.querySelectorAll("[data-torque-motor]")];
+
+  function availableMotors(){
+    return Object.keys(torqueData[selectedDrill]);
+  }
+
+  function refreshMotorAvailability(){
+    const available = availableMotors();
+
+    if(!available.includes(selectedMotor)){
+      selectedMotor = available[0];
+    }
+
+    motorButtons.forEach(button => {
+      const motor = button.dataset.torqueMotor;
+      const isAvailable = available.includes(motor);
+      button.classList.toggle("disabled", !isAvailable);
+      button.classList.toggle("active", isAvailable && motor === selectedMotor);
+      button.setAttribute("aria-disabled", String(!isAvailable));
+      button.tabIndex = isAvailable ? 0 : -1;
+    });
+  }
+
+  function updateTorque(){
+    pressureDisplay.textContent = `${pressureBar} bar`;
+    const referenceTorqueNm = torqueData[selectedDrill][selectedMotor];
+    const calculatedNm = Math.round(referenceTorqueNm * pressureBar / REFERENCE_PRESSURE_BAR);
+    const calculatedFtLb = Math.round(calculatedNm * FT_LB_PER_NM);
+    torqueNm.textContent = calculatedNm;
+    torqueFtLb.textContent = calculatedFtLb;
+  }
+
+  pressureSlider.addEventListener("input", event => {
+    pressureBar = Number(event.target.value);
+    updateTorque();
+  });
+
+  drillButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      selectedDrill = button.dataset.torqueDrill;
+      drillButtons.forEach(item => item.classList.toggle("active", item.dataset.torqueDrill === selectedDrill));
+      refreshMotorAvailability();
+      updateTorque();
+    });
+  });
+
+  motorButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const motor = button.dataset.torqueMotor;
+      if(!(motor in torqueData[selectedDrill])) return;
+      selectedMotor = motor;
+      refreshMotorAvailability();
+      updateTorque();
+    });
+  });
+
+  refreshMotorAvailability();
+  updateTorque();
+}
+
+function toggleQR() {
+  const popup = document.getElementById("qr-popup");
+  if (!popup) return;
+  popup.style.display = popup.style.display === "flex" ? "none" : "flex";
+}
+function openMaxRotationPopup(drillName){
+
+  let groupName = "";
+
+  if (["RD1735","RD927","HL1560"].includes(drillName)) {
+    groupName = "Long Hole Drills";
+  }
+
+  if (["RDX5","RD525","RD535"].includes(drillName)) {
+    groupName = "Development Drills";
+  }
+
+  if (["RD314","RD414"].includes(drillName)) {
+    groupName = "Bolting Drills";
+  }
+let tableRows = "";
+
+if (groupName === "Development Drills") {
+  tableRows = `
+    <tr><td style="padding:8px;border:1px solid #444;">RD525</td><td style="padding:8px;border:1px solid #444;">OMS80</td><td style="padding:8px;border:1px solid #444;">400</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD525</td><td style="padding:8px;border:1px solid #444;">OMS125</td><td style="padding:8px;border:1px solid #444;">280</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD525</td><td style="padding:8px;border:1px solid #444;">OMS160</td><td style="padding:8px;border:1px solid #444;">225</td></tr>
+
+    <tr><td style="padding:8px;border:1px solid #444;">RDX5</td><td style="padding:8px;border:1px solid #444;">OMS80</td><td style="padding:8px;border:1px solid #444;">365</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RDX5</td><td style="padding:8px;border:1px solid #444;">OMS125</td><td style="padding:8px;border:1px solid #444;">265</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RDX5</td><td style="padding:8px;border:1px solid #444;">OMS160</td><td style="padding:8px;border:1px solid #444;">210</td></tr>
+
+    <tr><td style="padding:8px;border:1px solid #444;">RD535</td><td style="padding:8px;border:1px solid #444;">OMS125</td><td style="padding:8px;border:1px solid #444;">280</td></tr>
+  `;
+}
+
+if (groupName === "Long Hole Drills") {
+  tableRows = `
+    <tr><td style="padding:8px;border:1px solid #444;">RD927</td><td style="padding:8px;border:1px solid #444;">OMT315</td><td style="padding:8px;border:1px solid #444;">190</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD927</td><td style="padding:8px;border:1px solid #444;">OMT400</td><td style="padding:8px;border:1px solid #444;">150</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD927</td><td style="padding:8px;border:1px solid #444;">OMT500</td><td style="padding:8px;border:1px solid #444;">120</td></tr>
+
+    <tr><td style="padding:8px;border:1px solid #444;">RD1735</td><td style="padding:8px;border:1px solid #444;">OMT400</td><td style="padding:8px;border:1px solid #444;">150</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD1735</td><td style="padding:8px;border:1px solid #444;">OMT500</td><td style="padding:8px;border:1px solid #444;">120</td></tr>
+
+    <tr><td style="padding:8px;border:1px solid #444;">HL1560</td><td style="padding:8px;border:1px solid #444;">OMT400</td><td style="padding:8px;border:1px solid #444;">100</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">HL1560</td><td style="padding:8px;border:1px solid #444;">OMT500</td><td style="padding:8px;border:1px solid #444;">100</td></tr>
+  `;
+}
+
+if (groupName === "Bolting Drills") {
+  tableRows = `
+    <tr><td style="padding:8px;border:1px solid #444;">RD314</td><td style="padding:8px;border:1px solid #444;">OMS100</td><td style="padding:8px;border:1px solid #444;">530</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD314</td><td style="padding:8px;border:1px solid #444;">OMS125</td><td style="padding:8px;border:1px solid #444;">430</td></tr>
+
+    <tr><td style="padding:8px;border:1px solid #444;">RD414</td><td style="padding:8px;border:1px solid #444;">OMS160</td><td style="padding:8px;border:1px solid #444;">300</td></tr>
+    <tr><td style="padding:8px;border:1px solid #444;">RD414</td><td style="padding:8px;border:1px solid #444;">OMS200</td><td style="padding:8px;border:1px solid #444;">240</td></tr>
+  `;
+}
+  const existingPopup = document.getElementById("rotationPopup");
+
+  if(existingPopup){
+    existingPopup.remove();
+  }
+
+  const popup = document.createElement("div");
+
+  popup.id = "rotationPopup";
+
+  popup.style.position = "fixed";
+  popup.style.inset = "0";
+  popup.style.background = "rgba(0,0,0,0.75)";
+  popup.style.display = "flex";
+  popup.style.alignItems = "center";
+  popup.style.justifyContent = "center";
+  popup.style.zIndex = "9999";
+
+popup.innerHTML = `
+  <div style="
+    background:#050505;
+    color:white;
+    padding:24px;
+    border-radius:20px;
+    width:min(90vw,600px);
+    border:1px solid #ff8200;
+  ">
+    <h3>${groupName}</h3>
+
+    <div style="
+      overflow-x:auto;
+      margin-top:12px;
+    ">
+    <table style="
+  width:100%;
+  border-collapse:collapse;
+  color:white;
+  font-size:14px;
+">
+  <tr style="background:#1d2b45;">
+    <th style="padding:8px;border:1px solid #444;">Rock Drill</th>
+    <th style="padding:8px;border:1px solid #444;">OMS</th>
+    <th style="padding:8px;border:1px solid #444;">Max RPM</th>
+  </tr>
+
+  ${tableRows}
+
+</table>
+    </div>
+<div style="
+  margin-top:14px;
+  font-size:12px;
+  color:#cbd5e1;
+  line-height:1.4;
+">
+  Maximum RPM values are rotation motor specific maximum speeds.
+  Actual drilling RPM can be selected and optimized using the app.
+</div>
+    <div style="margin-top:16px;text-align:right;">
+      <button onclick="closeMaxRotationPopup()">
+        Close
+      </button>
+    </div>
+  </div>
+`;
+  document.body.appendChild(popup);
+}
+
+function closeMaxRotationPopup(){
+  const popup = document.getElementById("rotationPopup");
+
+  if(popup){
+    popup.remove();
+  }
+}
+showLandingPage();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
+}
+</script>
+
+</body>
+</html>
